@@ -38,7 +38,8 @@ minutes = 0,
 seconds = 0,
 pillXValue,
 pillYValue,
-interval;
+interval,
+hiScores;
 
 // create and print a table to the console of all default settings onload
 const initialTableObject = {
@@ -48,7 +49,13 @@ const initialTableObject = {
   turn,
 };
 
-window.onload = () => console.table(initialTableObject);
+onload = () => console.table(initialTableObject);
+
+const makeNetworkRequest = async (url, options = {}) => {
+  const response = await fetch(url, options);
+  const parsedResponse = await response.json();
+  return parsedResponse;
+}
 
 // fn to pad hrs, mins, secs with zeros where there is less than 10 for a consistent look
 const padTimes = (unit) => (unit < 10 ? '0' : '') + unit;
@@ -293,6 +300,15 @@ const runGame = (e) => {
     
     // display user score on game over modal
     finalScore.innerText = score;
+
+    if (!hiScores[9] || score > Number(hiScores[9].score)) {
+      const name = prompt(`
+        Congrats, You\'ve scored in the top 10!!\n
+        Please enter an identifier:
+      `);
+      const time = timer.innerText;
+      insertHiScore(score, name ? name : 'anonymous', time);
+    }
     
     // enable instructions button
     viewInstructionsButton.disabled = false;
@@ -300,9 +316,6 @@ const runGame = (e) => {
     // clear current board
     snakeBoardContext.clearRect(0, 0, snakeBoard.width, snakeBoard.height);
 
-  } else if (timeout <= 50) {
-    // by the time the timeout gets this low the game is hardly playable and a winner is declared
-    winner = true;
   } else {
     
     // repaint canvas with each call to runGame if all other conditions fail
@@ -317,7 +330,7 @@ const runGame = (e) => {
   }
 }
 
-const populatePill = (x, y) => {
+const populatePill = async (x, y) => {
 
   // declare variable to make sure the pill isn't populated on top of the snake
   let pillIsOnOrAroundSnake = false;
@@ -356,6 +369,8 @@ const populatePill = (x, y) => {
   snakeBoardContext.fillStyle = pillColor;
   snakeBoardContext.fill();
   snakeBoardContext.closePath();
+
+  hiScores ??= await getHiScores();
 }
 
 // assess if snake has collided with a pill
@@ -399,6 +414,20 @@ const checkForTailCollision = (head) => {
       clearInterval(interval);
     }
   });
+}
+
+const getHiScores = async () => {
+  const getHiScoresResponse = await makeNetworkRequest('/backend/get_scores.php');
+  return getHiScoresResponse.scores;
+}
+
+const insertHiScore = (score, name, time) => {
+  const options = {
+    method: 'POST',
+    body: JSON.stringify({ score, name, time }),
+    'content-type': 'application/json',
+  }
+  makeNetworkRequest('/backend/insert_scores.php', options);
 }
 
 drawSnake();
