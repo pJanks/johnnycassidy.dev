@@ -1,5 +1,5 @@
 auth
 logs
 db
-.env
+config.php
 .htaccess
