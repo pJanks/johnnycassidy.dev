@@ -1,0 +1,5 @@
+auth
+logs
+db
+.env
+.htaccess

@@ -1,0 +1,41 @@
+.message-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-heading {
+  font-size: 1000%;
+  font-weight: 100;
+  text-align: center;
+}
+
+.message {
+  font-size: 170%;
+  font-weight: 500;
+  margin: -20px 0 50px 0;
+}
+
+.back-to-home-link {
+  background-color: #000;
+  border-radius: 15px;
+  color: #DEF8FA;
+  font-size: 120%;
+  outline: 2px solid transparent;
+  padding: 10px 55px;
+  text-transform: uppercase;
+}
+
+.back-to-home-link:hover {
+  text-decoration: underline;
+}
+
+.back-to-home-link:active {
+  background-color: transparent;
+  color: #282721;
+  font-weight: 700;
+}
+
+.back-to-home-link:focus {
+  outline: 3px solid #00F;
+}
