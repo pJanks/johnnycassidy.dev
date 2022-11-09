@@ -27,6 +27,7 @@
           case "/home":
           case "/snake":
           case "/sandbox":
+          case "/projects":
           case "/404":
             require "views/$route/index.html";
           break;

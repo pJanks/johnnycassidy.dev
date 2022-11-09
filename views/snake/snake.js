@@ -176,54 +176,59 @@ const handleStartOrResetButtonClick = (e) => {
     // run app
     runGame();
     running = true;
-  } else if (e.target.innerText.toLowerCase() === 'reset' && !running) {
-
-    console.clear();
-
-    // reset starting velocities so snake will proceed toward right of the screen
-    xVelocity = 10;
-    yVelocity = 0;
-    
-    // update state to stop recursively calling runGame fn
-    running = false;
-    reset = true;
-    loser = true;
-
-    // randomly put pill on canvas
-    populatePill();
-    drawSnake();
-
-    // enable view instructions button
-    viewInstructionsButton.disabled = false;
-    viewHiScoresButton.disabled = false;
-
-    // hide game over modal
-    gameOverModal.classList.add('hidden');
-
-    // update button text
-    e.target.innerText = 'Start';
-
-    // add snake to canvas without movement
-    drawSnake();
-  } else if (e.target.innerText.toLowerCase() === 'reset' && running) {
-    
-    console.clear();
-
-    // reset starting velocities so snake will proceed toward right of the screen
-    xVelocity = 10;
-    yVelocity = 0;
-
-    // update state to stop recursively calling runGame fn
-    running = false;
-    reset = true;
-    loser = true;
-
-    // randomly put pill on canvas
-    populatePill();
-
-    // add snake to canvas without movement
-    drawSnake();
+  } else {
+    location.reload();
   }
+  
+  
+  // else if (e.target.innerText.toLowerCase() === 'reset' && !running) {
+
+  //   console.clear();
+
+  //   // reset starting velocities so snake will proceed toward right of the screen
+  //   xVelocity = 10;
+  //   yVelocity = 0;
+    
+  //   // update state to stop recursively calling runGame fn
+  //   running = false;
+  //   reset = true;
+  //   loser = true;
+
+  //   // randomly put pill on canvas
+  //   populatePill();
+  //   drawSnake();
+
+  //   // enable view instructions button
+  //   viewInstructionsButton.disabled = false;
+  //   viewHiScoresButton.disabled = false;
+
+  //   // hide game over modal
+  //   gameOverModal.classList.add('hidden');
+
+  //   // update button text
+  //   e.target.innerText = 'Start';
+
+  //   // add snake to canvas without movement
+  //   drawSnake();
+  // } else if (e.target.innerText.toLowerCase() === 'reset' && running) {
+    
+  //   console.clear();
+
+  //   // reset starting velocities so snake will proceed toward right of the screen
+  //   xVelocity = 10;
+  //   yVelocity = 0;
+
+  //   // update state to stop recursively calling runGame fn
+  //   running = false;
+  //   reset = true;
+  //   loser = true;
+
+  //   // randomly put pill on canvas
+  //   populatePill();
+
+  //   // add snake to canvas without movement
+  //   drawSnake();
+  // }
 }
 
 // toggle instructions on/off on instructions button click
@@ -365,8 +370,10 @@ const populatePill = async (x = null, y = null) => {
   snakeBoardContext.fill();
   snakeBoardContext.closePath();
 
-  hiScores ??= await makeNetworkRequest('/backend/get_scores.php');
-  populateHiScores();
+  if (!hiScores) {
+    hiScores = await makeNetworkRequest('/backend/get_scores.php');
+    populateHiScores();
+  }
 }
 
 const populateHiScores = () => {

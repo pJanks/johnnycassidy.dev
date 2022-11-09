@@ -74,7 +74,6 @@ body {
   padding: 15px;
   position: absolute;
   width: 600px;
-  z-index: 1;
 }
 
 .game-over-text {
