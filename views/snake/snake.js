@@ -2,9 +2,12 @@
 // each snake piece is 10px x 10px
 
 const startOrResetButton = document.querySelector('.start-or-reset-game-button');
-const closeInstructionsButton = document.querySelector('.close-instructions-button');
 const viewInstructionsButton = document.querySelector('.view-instructions-button');
+const closeInstructionsButton = document.querySelector('.close-instructions-button');
+const viewHiScoresButton = document.querySelector('.view-hi-scores-button');
+const closeHiScoresButton = document.querySelector('.close-hi-scores-button');
 const instructionsModal = document.querySelector('.game-instructions-modal');
+const hiScoresModal = document.querySelector('.hi-scores-modal');
 const gameOverModal = document.querySelector('.game-over-modal');
 const finalScore = document.querySelector('.final-score');
 const timer = document.querySelector('.timer');
@@ -12,13 +15,13 @@ const snakeBoard = document.querySelector('.snake-game-canvas');
 
 snakeBoard.addEventListener('keydown', (e) => setVelocities(e));
 startOrResetButton.addEventListener('click', (e) => handleStartOrResetButtonClick(e));
-closeInstructionsButton.addEventListener('click', (e) => handleCloseInstructionsButtonClick(e));
-viewInstructionsButton.addEventListener('click', (e) => handleInstructionsButtonClick(e));
+closeInstructionsButton.addEventListener('click', () => toggleModals(instructionsModal));
+viewInstructionsButton.addEventListener('click', () => toggleModals(instructionsModal));
+viewHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal));
+closeHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal));
 
-// prevent a user from accidentally navigating out of canvas
-snakeBoard.addEventListener('blur', () => {
-  running ? snakeBoard.focus() : null;
-});
+// prevent a user from navigating out of canvas range
+snakeBoard.addEventListener('blur', () => running ? snakeBoard.focus() : null);
 
 // create a two dimensional drawing context
 const snakeBoardContext = snakeBoard.getContext('2d');
@@ -57,14 +60,12 @@ const makeNetworkRequest = async (url, options = {}) => {
   return parsedResponse;
 }
 
-// fn to pad hrs, mins, secs with zeros where there is less than 10 for a consistent look
+// fn to pad hrs, mins, secs with zeros if there is less than 10 for a consistent look
 const padTimes = (unit) => (unit < 10 ? '0' : '') + unit;
 
 const adjustTimes = () => {
-  // add a second
   seconds++
 
-  // increment minutes at 60 seconds and reset seconds
   if (seconds === 60) {
     minutes++;
     seconds = 0;
@@ -73,7 +74,6 @@ const adjustTimes = () => {
     console.log('extra points added for a minute');
   }
 
-  // increment hours at 60 minutes and reset seconds and minutes
   if (minutes === 60) {
     hours++;
     minutes = 0;
@@ -83,19 +83,16 @@ const adjustTimes = () => {
     padTimes(seconds);
     console.log('extra points added for an hour');
   }
-  
-  // reflect current time on DOM
+
   timer.innerText = `${padTimes(hours)}:${padTimes(minutes)}:${padTimes(seconds)}`;
 }
 
-// choose red as initial pill color
 let pillColor = '#F00';
 
-// declare constants for board color details
 const boardBackground = '#000';
 const snakeColor = '#28BD00';
 
-// fn to return array of initial snake state for reuse on reset
+// initial snake state for reuse on reset
 // snake always begins in the middle of the board
 const getInitialSnake = () => [
   { x: 300, y: 180 },
@@ -105,13 +102,12 @@ const getInitialSnake = () => [
   { x: 260, y: 180 },
 ];
 
-// use copy for game so that original state is unchanged on reset
-let snakeCopy = getInitialSnake();
+let snake = getInitialSnake();
 
 // horizontal velocity, snake begins moving at ten pixels to the right
 let xVelocity = 10;
 
-// set vertical velocity
+// vertical velocity
 let yVelocity = 0;
 
 // update velocities based on keypresses
@@ -138,7 +134,6 @@ const setVelocities = (e) => {
   }
 }
 
-// set game for reset or initial start
 const handleStartOrResetButtonClick = (e) => {
 
   // reset timing
@@ -148,10 +143,10 @@ const handleStartOrResetButtonClick = (e) => {
   seconds = 0;
   timer.innerHTML = `${padTimes(hours)}:${padTimes(minutes)}:${padTimes(seconds)}`;
 
-  // reset player status and start with original centered snake
+  // reset player status and start with original, centered snake
   loser = false;
   timeout = 100;
-  snakeCopy = getInitialSnake();
+  snake = getInitialSnake();
   score = 0;
   turn = 0;
   points = 100;
@@ -173,6 +168,7 @@ const handleStartOrResetButtonClick = (e) => {
 
     // disable instructions button during gameplay
     viewInstructionsButton.disabled = true;
+    viewHiScoresButton.disabled = true;
 
     // update button text
     e.target.innerText = 'Reset';
@@ -195,9 +191,11 @@ const handleStartOrResetButtonClick = (e) => {
 
     // randomly put pill on canvas
     populatePill();
+    drawSnake();
 
     // enable view instructions button
     viewInstructionsButton.disabled = false;
+    viewHiScoresButton.disabled = false;
 
     // hide game over modal
     gameOverModal.classList.add('hidden');
@@ -228,11 +226,8 @@ const handleStartOrResetButtonClick = (e) => {
   }
 }
 
-// close instructions when specifically clicking close
-const handleCloseInstructionsButtonClick = (e) => instructionsModal.classList.add('hidden');
-
 // toggle instructions on/off on instructions button click
-const handleInstructionsButtonClick = (e) => instructionsModal.classList.contains('hidden') ? instructionsModal.classList.remove('hidden') : instructionsModal.classList.add ('hidden');
+const toggleModals = (modal) => modal.classList.contains('hidden') ? modal.classList.remove('hidden') : modal.classList.add ('hidden');
 
 // reset to blank canvas
 const clearCanvas = () => {
@@ -248,7 +243,7 @@ const clearCanvas = () => {
 }
 
 // Draw the snake on the canvas
-const drawSnake = () => snakeCopy.forEach((snakePart, i) => drawSnakePart(snakePart, i));
+const drawSnake = () => snake.forEach((snakePart, i) => drawSnakePart(snakePart, i));
 
 // Draw one snake part
 const drawSnakePart = (part, i) => {
@@ -263,11 +258,10 @@ const drawSnakePart = (part, i) => {
   snakeBoardContext.strokeRect(part.x, part.y, 10, 10);
 }
 
-// method to update position of snake and velocities
 const moveSnake = () => {  
 
   // condition to check if a collision occurs with one of the walls
-  if (snakeCopy[0].x + xVelocity === -10 || snakeCopy[0].x + xVelocity === 600 || snakeCopy[0].y + yVelocity === -10 || snakeCopy[0].y + yVelocity === 350) {
+  if (snake[0].x + xVelocity === -10 || snake[0].x + xVelocity === 600 || snake[0].y + yVelocity === -10 || snake[0].y + yVelocity === 350) {
     loser = true;
     running = false;
     clearInterval(interval);
@@ -275,9 +269,11 @@ const moveSnake = () => {
   }
 
   // variable describing where the snake will be next
-  const head = { x: snakeCopy[0].x + xVelocity, y: snakeCopy[0].y + yVelocity };
+  const head = {
+    x: snake[0].x + xVelocity,
+    y: snake[0].y + yVelocity,
+  };
 
-    // check to see if the snake collided with itself
     checkForTailCollision(head);
 
     // if the snake collides with a pill, randomly generate another one
@@ -286,8 +282,8 @@ const moveSnake = () => {
     } else {
       
       // add new head position and remove end of tail
-      snakeCopy.unshift(head);
-      snakeCopy.pop();
+      snake.unshift(head);
+      snake.pop();
     }
 }
 
@@ -303,22 +299,22 @@ const runGame = (e) => {
 
     if (!hiScores[9] || score > Number(hiScores[9].score)) {
       const name = prompt(`
-        Congrats, You\'ve scored in the top 10!!\n
+        Congrats, You\'ve scored in the top 10!!
         Please enter an identifier:
       `);
       const time = timer.innerText;
       insertHiScore(score, name ? name : 'anonymous', time);
     }
     
-    // enable instructions button
     viewInstructionsButton.disabled = false;
+    viewHiScoresButton.disabled = false;
     
     // clear current board
     snakeBoardContext.clearRect(0, 0, snakeBoard.width, snakeBoard.height);
 
   } else {
     
-    // repaint canvas with each call to runGame if all other conditions fail
+    // repaint canvas with each call to runGame
     setTimeout(() => {
       keyClicked = false;
       clearCanvas();
@@ -330,7 +326,7 @@ const runGame = (e) => {
   }
 }
 
-const populatePill = async (x, y) => {
+const populatePill = async (x = null, y = null) => {
 
   // declare variable to make sure the pill isn't populated on top of the snake
   let pillIsOnOrAroundSnake = false;
@@ -344,14 +340,13 @@ const populatePill = async (x, y) => {
     possibleY = Math.random() * 35 + 5
     
     // make sure the random coordinates are not too close or on top of the snake
-    snakeCopy.forEach(snakePart => {
+    snake.forEach(snakePart => {
       if (possibleX * 10 - snakePart.x <= 5 && possibleX * 10 - snakePart.x >= -5 && possibleY * 10 - snakePart.y <= 5 && possibleY * 10 - snakePart.y >= -5) {
         pillIsOnOrAroundSnake = true;
       }
     });
 
     // make sure random coordinates are not off the border
-    // may not need this ??
     if (possibleX * 10 < 5 || possibleX * 10 > 595 || possibleY * 10 < 5 || possibleY * 10 > 345 || pillIsOnOrAroundSnake) {
       populatePill();
       return;
@@ -370,10 +365,18 @@ const populatePill = async (x, y) => {
   snakeBoardContext.fill();
   snakeBoardContext.closePath();
 
-  hiScores ??= await getHiScores();
+  hiScores ??= await makeNetworkRequest('/backend/get_scores.php');
+  populateHiScores();
 }
 
-// assess if snake has collided with a pill
+const populateHiScores = () => {
+  for (let i = 0; i < 10; i++) {
+    const hiScore = hiScores[i] ?? { name: 'EMPTY', score: '0', time: '00:00:00' };
+    const hiScoreRow = document.querySelector(`.table-data-${i}`);
+    hiScoreRow.innerHTML += `${i + 1}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time}`;
+  }
+}
+
 const checkForPillCollision = (head) => {
   if ((xVelocity && head.x + 5 === pillXValue) && head.y + 5 === pillYValue || (yVelocity && head.y + 5 === pillYValue) && head.x + 5 === pillXValue) {
 
@@ -381,15 +384,10 @@ const checkForPillCollision = (head) => {
     pillColor === '#F00' ? pillColor = '#00F' : pillColor = '#F00';
 
     // add head without removing end of tail to grow snake
-    snakeCopy.unshift(head);
+    snake.unshift(head);
 
-    // increment user score
     score += points;
-
-    // add one to points for effect in high scores
     points++;
-
-    // increment turn
     turn++;
 
     // gradually speed up movement of the snake
@@ -406,19 +404,13 @@ const checkForPillCollision = (head) => {
   }
 }
 
-// assess if snake has collided with itself
 const checkForTailCollision = (head) => {
-  snakeCopy.forEach(snakePart => {
+  snake.forEach(snakePart => {
     if (head.x === snakePart.x && head.y === snakePart.y) {
       loser = true;
       clearInterval(interval);
     }
   });
-}
-
-const getHiScores = async () => {
-  const getHiScoresResponse = await makeNetworkRequest('/backend/get_scores.php');
-  return getHiScoresResponse.scores;
 }
 
 const insertHiScore = (score, name, time) => {

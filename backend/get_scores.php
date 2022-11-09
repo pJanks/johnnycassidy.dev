@@ -17,10 +17,7 @@
 
     $successMessage = "$date retrieved scores\n";
     file_put_contents('../logs/log.log', $successMessage, FILE_APPEND);
-    echo json_encode([
-      'message' => $successMessage,
-      'scores' => $scores,
-    ], JSON_PRETTY_PRINT);
+    echo json_encode($scores, JSON_PRETTY_PRINT);
   } catch(PDOException $e) {
     $errorMessage = $date . ' ERROR UPDATING scores TABLE: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
     file_put_contents('../logs/error.log', $errorMessage, FILE_APPEND);
