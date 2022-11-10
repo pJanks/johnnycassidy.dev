@@ -101,7 +101,8 @@ const getInitialSnake = () => [
 
 let snake = getInitialSnake();
 
-// horizontal velocity, snake begins moving at ten pixels to the right
+// snake begins moving at 10px/100ms to the right
+// horizontal velocity
 let xVelocity = 10;
 
 // vertical velocity
@@ -266,11 +267,11 @@ const populateHiScores = () => {
   for (let i = 0; i < 10; i++) {
     const hiScore = hiScores[i] ?? { name: 'EMPTY', score: '0', time: '00:00:00' };
     const hiScoreRow = document.querySelector(`.table-data-${i}`);
-    hiScoreRow.innerText = `${i + 1}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time}`;
+    hiScoreRow.innerText = `${i === 9 ? i + 1 : '0' + String(i + 1)}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time}`;
   }
 }
 
-const checkForPillCollision = (head) => {
+const checkForPillCollision = head => {
   if ((xVelocity && head.x + 5 === pillXValue) && head.y + 5 === pillYValue || (yVelocity && head.y + 5 === pillYValue) && head.x + 5 === pillXValue) {
 
     pillColor === '#F00' ? pillColor = '#00F' : pillColor = '#F00';
@@ -307,7 +308,7 @@ const insertHiScore = (score, name, time) => {
     method: 'POST',
     body: JSON.stringify({ score, name, time }),
     'content-type': 'application/json',
-  }
+  };
   makeNetworkRequest('/backend/insert_scores.php', options);
 }
 
