@@ -5,7 +5,6 @@
   $date = json_encode($date->format('m.d.y h:i:s A'), JSON_PRETTY_PRINT);
 
   try {
-    return;
     $scoreData = json_decode(file_get_contents('php://input'));
     $score = $scoreData->score;
     $name = $scoreData->name;
