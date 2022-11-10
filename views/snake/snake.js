@@ -165,11 +165,11 @@ const clearCanvas = () => {
 
 // Draw the snake on the canvas
 const drawSnake = () => {
-  for (let i = 0; i < snake.length; i++) {
+  snake.forEach((part, i) => {
     !i ? snakeBoardContext.fillStyle = '#FF0' : snakeBoardContext.fillStyle = snakeColor;
-    snakeBoardContext.fillRect(snake[i].x, snake[i].y, 10, 10);
-    snakeBoardContext.strokeRect(snake[i].x, snake[i].y, 10, 10);
-  }
+    snakeBoardContext.fillRect(part.x, part.y, 10, 10);
+    snakeBoardContext.strokeRect(part.x, part.y, 10, 10);
+  });
 }
 
 const moveSnake = () => {  
@@ -236,11 +236,11 @@ const populatePill = async (x = null, y = null) => {
     possibleY = Math.random() * 35 + 5
     
     // make sure the random coordinates are not on top of the snake
-    for (let i = 0; i < snake.length; i++) {
-      if (possibleX * 10 - snake[i].x <= 5 && possibleX * 10 - snake[i].x >= -5 && possibleY * 10 - snake[i].y <= 5 && possibleY * 10 - snake[i].y >= -5) {
+    snake.forEach(part => {
+      if (possibleX * 10 - part.x <= 5 && possibleX * 10 - part.x >= -5 && possibleY * 10 - part.y <= 5 && possibleY * 10 - part.y >= -5) {
         pillIsOnOrAroundSnake = true;
       }
-    }
+    });
 
     // make sure random coordinates are not off the border
     if (possibleX * 10 < 5 || possibleX * 10 > 595 || possibleY * 10 < 5 || possibleY * 10 > 345 || pillIsOnOrAroundSnake) {
@@ -294,12 +294,12 @@ const checkForPillCollision = (head) => {
 }
 
 const checkForTailCollision = (head) => {
-  for (let i = 0; i < snake.length; i++) {
-    if (head.x === snake[i].x && head.y === snake[i].y) {
+  snake.forEach(part => {
+    if (head.x === part.x && head.y === part.y) {
       loser = true;
       clearInterval(interval);
     }
-  }
+  });
 }
 
 const insertHiScore = (score, name, time) => {
