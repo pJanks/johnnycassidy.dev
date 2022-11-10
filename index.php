@@ -4,7 +4,7 @@
   ini_set("display_errors", 1);
   error_reporting(E_ALL);
   session_start();
-  
+
   $request_uri = strtolower(rtrim($_SERVER["REQUEST_URI"], "/"));
   $route = explode("/", $request_uri)[1] ?? "home";
 ?>
