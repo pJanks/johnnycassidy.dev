@@ -9,12 +9,14 @@
     $score = $scoreData->score;
     $name = $scoreData->name;
     $time = $scoreData->time;
+    $pillsEaten = $scoreData->pillsEaten;
     
-    $sql = 'INSERT INTO scores (score, name, time) VALUES (:score, :name, :time)';
+    $sql = 'INSERT INTO scores (score, name, time, pills_eaten) VALUES (:score, :name, :time, :pills_eaten)';
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':score', $score);
     $stmt->bindParam(':name', $name);
     $stmt->bindParam(':time', $time);
+    $stmt->bindParam(':pills_eaten', $pillsEaten);
     $stmt->execute();
 
     $successMessage = "$date inserted into scores\n";

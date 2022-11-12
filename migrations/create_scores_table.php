@@ -11,6 +11,7 @@
         score INT(20) UNSIGNED,
         name VARCHAR(255) NOT NULL,
         time VARCHAR(30) NOT NULL,
+        pills_eaten INT(20) UNSIGNED,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     ';

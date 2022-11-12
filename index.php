@@ -17,7 +17,7 @@
     <?= "<link rel=stylesheet href=/views/$route/$route.css>"; ?>
   </head>
   <body>
-    <?php require "components/main-header.php" ?>
+    <?php require_once "components/main-header.php" ?>
     <main class="app-wrapper">
       <?php
         switch ($request_uri) {
@@ -27,7 +27,7 @@
           case "/sandbox":
           case "/projects":
           case "/404":
-            require "views/$route/index.html";
+            require_once "views/$route/index.html";
           break;
           default:
             header("Location: /404");

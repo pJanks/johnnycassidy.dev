@@ -1,33 +1,34 @@
 // board dimensions are 600px x 350px
 // each snake piece is 10px x 10px
 
-const startOrResetButton = document.querySelector('.start-or-reset-game-button');
-const viewInstructionsButton = document.querySelector('.view-instructions-button');
 const closeInstructionsButton = document.querySelector('.close-instructions-button');
-const viewHiScoresButton = document.querySelector('.view-hi-scores-button');
+const viewInstructionsButton = document.querySelector('.view-instructions-button');
+const startOrResetButton = document.querySelector('.start-or-reset-game-button');
 const closeHiScoresButton = document.querySelector('.close-hi-scores-button');
 const instructionsModal = document.querySelector('.game-instructions-modal');
+const viewHiScoresButton = document.querySelector('.view-hi-scores-button');
 const hiScoresModal = document.querySelector('.hi-scores-modal');
 const gameOverModal = document.querySelector('.game-over-modal');
+const snakeBoard = document.querySelector('.snake-game-canvas');
 const finalScore = document.querySelector('.final-score');
 const timer = document.querySelector('.timer');
-const snakeBoard = document.querySelector('.snake-game-canvas');
 
-snakeBoard.addEventListener('keydown', (e) => setVelocities(e));
 startOrResetButton.addEventListener('click', (e) => handleStartOrResetButtonClick(e));
 closeInstructionsButton.addEventListener('click', () => toggleModals(instructionsModal));
 viewInstructionsButton.addEventListener('click', () => toggleModals(instructionsModal));
 viewHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal, true));
 closeHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal));
+snakeBoard.addEventListener('keydown', (e) => setVelocities(e));
 
-// prevent a user from navigating out of canvas range
+// prevent a user from navigating off of gameboard
 snakeBoard.addEventListener('blur', () => running ? snakeBoard.focus() : null);
 
-// create a two dimensional drawing context
 const snakeBoardContext = snakeBoard.getContext('2d');
+const boardBackground = '#000';
+const snakeColor = '#28BD00';
 
-// declare empty variables to determine different states of gameplay
-let running = false,
+let pillColor = '#F00',
+running = false,
 winner = false,
 loser = false,
 reset = false,
@@ -35,24 +36,26 @@ score = 0,
 timeout = 100,
 points = 100,
 keyClicked = false,
-turn = 0,
+pillsEaten = 0,
 hours = 0,
 minutes = 0,
 seconds = 0,
 hiScores = [],
+xVelocity = 10,
+yVelocity = 0,
 pillXValue,
 pillYValue,
 interval;
 
-// create and print a table to the console of all default settings onload
+// create and print a table to the console of defaults
 const initialTableObject = {
   intervalRunsIn: `${timeout} ms`,
   nextPillIsWorth: points,
   score,
-  turn,
+  pillsEaten,
 };
 
-onload = console.table(initialTableObject);
+console.table(initialTableObject);
 
 const makeNetworkRequest = async (url, options = {}) => {
   const response = await fetch(url, options);
@@ -61,10 +64,10 @@ const makeNetworkRequest = async (url, options = {}) => {
 }
 
 // pad time with zeros if less than 10
-const padTime = (unit) => (unit < 10 ? '0' : '') + unit;
+const padNumber = unit => `${unit < 10 ? '0' : ''}${unit}`;
 
 const adjustTimes = () => {
-  seconds++
+  seconds++;
 
   if (seconds === 60) {
     minutes++;
@@ -81,17 +84,12 @@ const adjustTimes = () => {
     console.log('extra points added for an hour');
   }
 
-  timer.innerText = `${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`;
+  timer.innerText = `${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}`;
 }
-
-let pillColor = '#F00';
-
-const boardBackground = '#000';
-const snakeColor = '#28BD00';
 
 // initial snake state for reuse on reset
 // snake always begins in the middle of the board
-const getInitialSnake = () => [
+const createSnake = () => [
   { x: 300, y: 180 },
   { x: 290, y: 180 },
   { x: 280, y: 180 },
@@ -99,19 +97,10 @@ const getInitialSnake = () => [
   { x: 260, y: 180 },
 ];
 
-let snake = getInitialSnake();
-
-// snake begins moving at 10px/100ms to the right
-// horizontal velocity
-let xVelocity = 10;
-
-// vertical velocity
-let yVelocity = 0;
+let snake = createSnake();
 
 // update velocities based on keypresses
-// the conditions make sure that you can't move backwards into your self
-// the keyClicked is used to make sure you cant choose another direction
-// until after the next render of the game
+// and make sure that you can't move backwards into your self
 const setVelocities = (e) => {
   if (!keyClicked) {
     keyClicked = true;
@@ -209,8 +198,7 @@ const runGame = (e) => {
         Congrats, You\'ve scored in the top 10!!
         Please enter an identifier:
       `);
-      const time = timer.innerText;
-      insertHiScore(score, name ? name : 'anonymous', time);
+      insertHiScore(name ? name : 'anonymous');
     }
     
     snakeBoardContext.clearRect(0, 0, snakeBoard.width, snakeBoard.height);
@@ -233,8 +221,8 @@ const populatePill = async (x = null, y = null) => {
 
     // get random 10x10 blocks on the canvas for pill placement
     // add five to center the pill in the square on the grid
-    possibleX = Math.random() * 60 + 5
-    possibleY = Math.random() * 35 + 5
+    const possibleX = Math.random() * 60 + 5;
+    const possibleY = Math.random() * 35 + 5;
     
     // make sure the random coordinates are not on top of the snake
     snake.forEach(part => {
@@ -265,9 +253,14 @@ const populatePill = async (x = null, y = null) => {
 
 const populateHiScores = () => {
   for (let i = 0; i < 10; i++) {
-    const hiScore = hiScores[i] ?? { name: 'EMPTY', score: '0', time: '00:00:00' };
+    const hiScore = hiScores[i] ?? {
+      name: 'EMPTY',
+      score: 0,
+      time: '00:00:00',
+      pills_eaten: 0,
+    };
     const hiScoreRow = document.querySelector(`.table-data-${i}`);
-    hiScoreRow.innerText = `${i === 9 ? i + 1 : '0' + String(i + 1)}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time}`;
+    hiScoreRow.innerText = `${padNumber(i + 1)}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time} - ${hiScore.pills_eaten} pills eaten`;
   }
 }
 
@@ -280,14 +273,14 @@ const checkForPillCollision = head => {
 
     score += points;
     points++;
-    turn++;
+    pillsEaten++;
     timeout = Number((timeout - .04).toFixed(2));
 
     const tableObject = {
       intervalRunsIn: `${timeout} ms`,
       nextPillIsWorth: points,
       score,
-      turn,
+      pillsEaten,
     };
     console.table(tableObject);
     return true;
@@ -303,10 +296,11 @@ const checkForTailCollision = (head) => {
   });
 }
 
-const insertHiScore = (score, name, time) => {
+const insertHiScore = (name) => {
+  const time = timer.innerText;
   const options = {
     method: 'POST',
-    body: JSON.stringify({ score, name, time }),
+    body: JSON.stringify({ score, name, time, pillsEaten }),
     'content-type': 'application/json',
   };
   makeNetworkRequest('/backend/insert_scores.php', options);
