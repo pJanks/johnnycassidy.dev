@@ -5,7 +5,7 @@
   $date = json_encode($date->format('m.d.y h:i:s A'), JSON_PRETTY_PRINT);
 
   try {
-    if (!isset($_SESSION['hasVisited'])) {
+    if (!isset($_SESSION['hasVisited']) || empty($_SESSION['hasVisited'])) {
       $_SESSION['hasVisited'] = true;
       $sql = "UPDATE visitor_counter SET counter = counter + 1";
       $stmt = $pdo->prepare($sql);
