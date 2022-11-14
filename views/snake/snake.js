@@ -1,6 +1,11 @@
 // board dimensions are 600px x 350px
 // each snake piece is 10px x 10px
 
+window.onload = async () => {
+  hiScores = await makeNetworkRequest('/backend/get_scores.php');
+  populateHiScores();
+}
+
 const closeInstructionsButton = document.querySelector('.close-instructions-button');
 const viewInstructionsButton = document.querySelector('.view-instructions-button');
 const startOrResetButton = document.querySelector('.start-or-reset-game-button');
@@ -14,9 +19,9 @@ const finalScore = document.querySelector('.final-score');
 const timer = document.querySelector('.timer');
 
 startOrResetButton.addEventListener('click', (e) => handleStartOrResetButtonClick(e));
-closeInstructionsButton.addEventListener('click', () => toggleModals(instructionsModal));
 viewInstructionsButton.addEventListener('click', () => toggleModals(instructionsModal));
-viewHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal, true));
+closeInstructionsButton.addEventListener('click', () => toggleModals(instructionsModal));
+viewHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal));
 closeHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal));
 snakeBoard.addEventListener('keydown', (e) => setVelocities(e));
 
@@ -24,12 +29,9 @@ snakeBoard.addEventListener('keydown', (e) => setVelocities(e));
 snakeBoard.addEventListener('blur', () => running ? snakeBoard.focus() : null);
 
 const snakeBoardContext = snakeBoard.getContext('2d');
-const boardBackground = '#000';
-const snakeColor = '#28BD00';
 
 let pillColor = '#F00',
 running = false,
-winner = false,
 loser = false,
 reset = false,
 score = 0,
@@ -63,8 +65,7 @@ const makeNetworkRequest = async (url, options = {}) => {
   return parsedResponse;
 }
 
-// pad time with zeros if less than 10
-const padNumber = unit => `${unit < 10 ? '0' : ''}${unit}`;
+const padNumber = number => String(number).padStart(2, '0');
 
 const adjustTimes = () => {
   seconds++;
@@ -79,7 +80,6 @@ const adjustTimes = () => {
   if (minutes === 60) {
     hours++;
     minutes = 0;
-    seconds = 0;
     points += 13;
     console.log('extra points added for an hour');
   }
@@ -87,17 +87,14 @@ const adjustTimes = () => {
   timer.innerText = `${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}`;
 }
 
-// initial snake state for reuse on reset
-// snake always begins in the middle of the board
-const createSnake = () => [
+// initial snake always begins in the middle of the board
+const snake = [
   { x: 300, y: 180 },
   { x: 290, y: 180 },
   { x: 280, y: 180 },
   { x: 270, y: 180 },
   { x: 260, y: 180 },
 ];
-
-let snake = createSnake();
 
 // update velocities based on keypresses
 // and make sure that you can't move backwards into your self
@@ -139,16 +136,12 @@ const handleStartOrResetButtonClick = (e) => {
   running = true;
 }
 
-const toggleModals = async (modal, fetchScores = false) => {
-  if (fetchScores) {
-    hiScores = await makeNetworkRequest('/backend/get_scores.php');
-    populateHiScores();
-  }
+const toggleModals = async (modal) => {
   modal.classList.contains('hidden') ? modal.classList.remove('hidden') : modal.classList.add('hidden');
 };
 
 const clearCanvas = () => {
-  snakeBoardContext.fillStyle = boardBackground;
+  snakeBoardContext.fillStyle = '#000';
   snakeBoardContext.fillRect(0, 0, snakeBoard.width, snakeBoard.height);
   snakeBoardContext.strokeRect(0, 0, snakeBoard.width, snakeBoard.height);
 }
@@ -156,7 +149,7 @@ const clearCanvas = () => {
 // Draw the snake on the canvas
 const drawSnake = () => {
   snake.forEach((part, i) => {
-    !i ? snakeBoardContext.fillStyle = '#FF0' : snakeBoardContext.fillStyle = snakeColor;
+    !i ? snakeBoardContext.fillStyle = '#FF0' : snakeBoardContext.fillStyle = '#28BD00';
     snakeBoardContext.fillRect(part.x, part.y, 10, 10);
     snakeBoardContext.strokeRect(part.x, part.y, 10, 10);
   });

@@ -164,6 +164,16 @@ body {
   text-decoration: underline;
 }
 
+/* global repeat styles */
+.description-link {
+  border-bottom: 1px solid #000;
+  font-weight: 600;
+}
+
+.description-link:hover {
+  color: #666;
+}
+
 /* animation keyframes */
 @keyframes slideIn {
   0% {

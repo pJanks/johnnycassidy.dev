@@ -1,5 +1,4 @@
 <?php
-  // remove if ever in production
   ini_set("display_errors", 1);
   error_reporting(E_ALL);
   session_start();
@@ -25,10 +24,12 @@
           case "/home":
           case "/snake":
           case "/sandbox":
-          case "/projects":
           case "/404":
             require_once "views/$route/index.html";
-          break;
+            break;
+          case "/projects":
+            require_once "views/$route/index.php";
+            break;
           default:
             header("Location: /404");
           break;

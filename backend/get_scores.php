@@ -15,8 +15,12 @@
       array_push($scores, $row);
     }
 
-    $successMessage = "$date retrieved scores\n";
-    file_put_contents('../logs/log.log', $successMessage, FILE_APPEND);
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $successMessage = "$date retrieved scores by $ip\n";
+
+    if ($ip !== $myIp) {
+      file_put_contents('../logs/log.log', $successMessage, FILE_APPEND);
+    }
     echo json_encode($scores, JSON_PRETTY_PRINT);
   } catch(PDOException $e) {
     $errorMessage = $date . ' ERROR GETTING scores TABLE: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";

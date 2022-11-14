@@ -22,20 +22,11 @@
 
 .self-description {
   animation: 1.5s linear fadeIn;
-  font-size: 120%;
+  font-size: 105%;
   letter-spacing: 1px;
-  line-height: 160%;
-  margin: 35px 0;
+  line-height: 150%;
+  margin: 20px 0;
   text-align: justify;
-}
-
-.description-link {
-  border-bottom: 1px solid #000;
-  font-weight: 600;
-}
-
-.description-link:hover {
-  color: #666;
 }
 
 .social-media-icons-wrapper {

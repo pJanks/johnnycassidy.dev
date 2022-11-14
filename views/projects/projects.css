@@ -5,8 +5,9 @@
 }
 
 .message-heading {
-  font-size: 500%;
-  margin-bottom: 60px;
+  font-size: 600%;
+  font-weight: 600;
+  margin-bottom: 40px;
   text-align: center;
   text-transform: uppercase;
 }
@@ -39,4 +40,113 @@
 
 .back-to-home-link:focus {
   outline: 3px solid #00F;
+}
+
+
+
+.projects-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 0 40px;
+}
+
+.project-wrapper {
+  border-bottom: 2px solid #DDD;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 30px 40px;
+}
+
+.project-heading {
+  font-size: 150%;
+  font-weight: 700;
+  text-decoration: underline;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.project-description-wrapper {
+  text-align: justify;
+  width: 55%;
+}
+
+.project-description-paragraph {
+  margin-bottom: 20px;
+}
+
+.project-video-or-image-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  padding-left: 30px;
+}
+
+.project-video-or-image {
+  border-radius: 8px;
+  width: 100%;
+}
+
+.caption {
+  font-size: 80%;
+  margin-top: 10px;
+  text-align: justify;
+}
+
+.tech-stack-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 40px;
+  width: 100%;
+}
+
+.tech-stack-heading {
+  font-size: 120%;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.tech-stack-span-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 120%;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.technology-span {
+  width: 10%;
+}
+
+.links-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+  width: 100%;
+}
+
+.view-live-site-or-github-link {
+  background-color: #FFF;
+  border: 3px solid #AAA;
+  border-radius: 25px;
+  padding: 10px;
+  text-align: center;
+  width: 250px;
+}
+
+.view-live-site-or-github-link:hover {
+  background-color: #EEE;
+}
+
+.view-live-site-or-github-link:active {
+  background-color: #666;
+  border: 3px solid #999;
+  color: #FFF;
 }
