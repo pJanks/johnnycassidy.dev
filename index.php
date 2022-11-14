@@ -2,6 +2,7 @@
   ini_set("display_errors", 1);
   error_reporting(E_ALL);
   session_start();
+  require_once 'backend/increment_counter.php';
   $request_uri = strtolower(rtrim($_SERVER["REQUEST_URI"], "/"));
   $route = explode("/", $request_uri)[1] ?? "home";
 ?>
@@ -22,13 +23,11 @@
         switch ($request_uri) {
           case "":
           case "/home":
+          case "/projects":
           case "/snake":
           case "/sandbox":
           case "/404":
             require_once "views/$route/index.html";
-            break;
-          case "/projects":
-            require_once "views/$route/index.php";
             break;
           default:
             header("Location: /404");

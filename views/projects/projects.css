@@ -85,6 +85,7 @@
 }
 
 .project-video-or-image {
+  border: 1px solid #000;
   border-radius: 8px;
   width: 100%;
 }
@@ -107,7 +108,7 @@
 .tech-stack-heading {
   font-size: 120%;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   text-align: center;
   text-transform: uppercase;
 }
@@ -116,12 +117,12 @@
   display: flex;
   flex-wrap: wrap;
   font-size: 120%;
-  justify-content: space-around;
+  justify-content: space-evenly;
   width: 100%;
 }
 
 .technology-span {
-  width: 10%;
+  margin: 0 20px;
 }
 
 .links-wrapper {
@@ -130,6 +131,10 @@
   justify-content: space-around;
   margin-top: 30px;
   width: 100%;
+}
+
+.no-links-available-wrapper {
+  color: #999;
 }
 
 .view-live-site-or-github-link {
