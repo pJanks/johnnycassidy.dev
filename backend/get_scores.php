@@ -16,9 +16,9 @@
     }
 
     $ip = $_SERVER['REMOTE_ADDR'];
-    $successMessage = "$date retrieved scores by $ip\n";
 
     if ($ip !== $myIp) {
+      $successMessage = "$date retrieved scores by $ip\n";
       file_put_contents('../logs/log.log', $successMessage, FILE_APPEND);
     }
     echo json_encode($scores, JSON_PRETTY_PRINT);

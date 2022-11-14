@@ -1,5 +1,5 @@
 <?php
-  require_once '../config.php';
+  require_once 'config.php';
 
   $date = new DateTime();
   $date = json_encode($date->format('m.d.y h:i:s A'), JSON_PRETTY_PRINT);
@@ -20,10 +20,10 @@
     $stmt->execute();
 
     $successMessage = "$date scores table created\n";
-    file_put_contents('../logs/log.log', $successMessage, FILE_APPEND);
+    file_put_contents('logs/log.log', $successMessage, FILE_APPEND);
     echo json_encode(['message' => $successMessage], JSON_PRETTY_PRINT);
   } catch(PDOException $e) {
     $errorMessage = $date . ' ERROR scores TABLE WASN\'T CREATED. ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
-    file_put_contents('../logs/error.log', $errorMessage, FILE_APPEND);
+    file_put_contents('logs/error.log', $errorMessage, FILE_APPEND);
     echo json_encode(['message' => $errorMessage], JSON_PRETTY_PRINT);
   }

@@ -1,6 +1,6 @@
 <?php
   $path = strtolower(explode('/', $_SERVER['REQUEST_URI'])[1]);
-  $slideInVerification = ($path === 'home' || !$path) ?  'slide-in' : '';
+  $slideInVerification = ($path === 'home' || !$path) ? 'slide-in' : '';
 ?>
 <header class="main-header">
   <section class="jcdotdev-wrapper <?= $slideInVerification; ?>">

@@ -109,6 +109,14 @@ body {
   padding-top: 10vh;
   width: 100%;
 }
+.description-link {
+  border-bottom: 1px solid #000;
+  font-weight: 600;
+}
+
+.description-link:hover {
+  color: #666;
+}
 
 /* main header styles */
 .main-header {
@@ -128,7 +136,7 @@ body {
 }
 
 .jcdotdev-wrapper {
-  flex: 1;
+  flex: 5;
   left: 0;
   position: relative;
 }
@@ -148,7 +156,7 @@ body {
 
 /* main nav styles */
 .main-nav {
-  flex: 2;
+  flex: 4;
 }
 
 .nav-list {
@@ -162,16 +170,6 @@ body {
 
 .nav-list-item-link:hover {
   text-decoration: underline;
-}
-
-/* global repeat styles */
-.description-link {
-  border-bottom: 1px solid #000;
-  font-weight: 600;
-}
-
-.description-link:hover {
-  color: #666;
 }
 
 /* animation keyframes */
