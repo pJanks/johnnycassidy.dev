@@ -2,7 +2,7 @@
   require_once '../config.php';
 
   $date = new DateTime();
-  $date = json_encode($date->format('m.d.y h:i:s A'), JSON_PRETTY_PRINT);
+  $date = $date->format('m.d.y h:i:s A');
 
   try {
     $sql = 'SELECT * FROM scores ORDER BY score DESC LIMIT 10';
@@ -18,7 +18,7 @@
     $ip = $_SERVER['REMOTE_ADDR'];
 
     if ($ip !== $myIp) {
-      $successMessage = "$date retrieved scores by $ip\n";
+      $successMessage = "$date $ip retrieved scores\n";
       file_put_contents('../logs/log.log', $successMessage, FILE_APPEND);
     }
     echo json_encode($scores, JSON_PRETTY_PRINT);

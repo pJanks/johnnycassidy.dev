@@ -136,9 +136,7 @@ const handleStartOrResetButtonClick = (e) => {
   running = true;
 }
 
-const toggleModals = async (modal) => {
-  modal.classList.contains('hidden') ? modal.classList.remove('hidden') : modal.classList.add('hidden');
-};
+const toggleModals = (modal) => modal.classList.toggle('hidden');
 
 const clearCanvas = () => {
   snakeBoardContext.fillStyle = '#000';
@@ -181,7 +179,7 @@ const moveSnake = () => {
   }
 }
 
-const runGame = (e) => {
+const runGame = () => {
   if (loser) {
     gameOverModal.classList.remove('hidden');
     finalScore.innerText = score;
@@ -191,7 +189,9 @@ const runGame = (e) => {
         Congrats, You\'ve scored in the top 10!!
         Please enter an identifier:
       `);
-      insertHiScore(name ? name : 'anonymous');
+      insertScore(name ? name : 'anonymous');
+    } else {
+      insertScore('anonymous');
     }
     
     snakeBoardContext.clearRect(0, 0, snakeBoard.width, snakeBoard.height);
@@ -289,7 +289,7 @@ const checkForTailCollision = (head) => {
   });
 }
 
-const insertHiScore = (name) => {
+const insertScore = (name) => {
   const time = timer.innerText;
   const options = {
     method: 'POST',

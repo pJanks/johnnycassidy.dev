@@ -2,7 +2,7 @@
   require_once 'config.php';
 
   $date = new DateTime();
-  $date = json_encode($date->format('m.d.y h:i:s A'), JSON_PRETTY_PRINT);
+  $date = $date->format('m.d.y h:i:s A');
 
   try {
     $sql = '
