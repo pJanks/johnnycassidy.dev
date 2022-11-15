@@ -1,11 +1,6 @@
 // board dimensions are 600px x 350px
 // each snake piece is 10px x 10px
 
-window.onload = async () => {
-  hiScores = await makeNetworkRequest('/backend/get_scores.php');
-  populateHiScores();
-}
-
 const closeInstructionsButton = document.querySelector('.close-instructions-button');
 const viewInstructionsButton = document.querySelector('.view-instructions-button');
 const startOrResetButton = document.querySelector('.start-or-reset-game-button');
@@ -25,15 +20,23 @@ viewHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal));
 closeHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal));
 snakeBoard.addEventListener('keydown', (e) => setVelocities(e));
 
-// prevent a user from navigating off of gameboard
+// prevent a user from navigating out of gameboard
 snakeBoard.addEventListener('blur', () => running ? snakeBoard.focus() : null);
 
 const snakeBoardContext = snakeBoard.getContext('2d');
 
+// snake always begins in the middle of the board
+const snake = [
+  { x: 300, y: 180 },
+  { x: 290, y: 180 },
+  { x: 280, y: 180 },
+  { x: 270, y: 180 },
+  { x: 260, y: 180 },
+];
+
 let pillColor = '#F00',
 running = false,
 loser = false,
-reset = false,
 score = 0,
 timeout = 100,
 points = 100,
@@ -42,7 +45,6 @@ pillsEaten = 0,
 hours = 0,
 minutes = 0,
 seconds = 0,
-hiScores = [],
 xVelocity = 10,
 yVelocity = 0,
 pillXValue,
@@ -59,6 +61,24 @@ const initialTableObject = {
 
 console.table(initialTableObject);
 
+window.onload = async () => {
+  const hiScores = await makeNetworkRequest('/backend/get_scores.php');
+  populateHiScores(hiScores);
+}
+
+const populateHiScores = (hiScores) => {
+  for (let i = 0; i < 10; i++) {
+    const hiScore = hiScores[i] ?? {
+      name: 'EMPTY',
+      score: 0,
+      time: '00:00:00',
+      pills_eaten: 0,
+    };
+    const hiScoreRow = document.querySelector(`.table-data-${i}`);
+    hiScoreRow.innerText = `${padNumber(i + 1)}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time} - ${hiScore.pills_eaten} pills eaten`;
+  }
+}
+
 const makeNetworkRequest = async (url, options = {}) => {
   const response = await fetch(url, options);
   const parsedResponse = await response.json();
@@ -67,145 +87,14 @@ const makeNetworkRequest = async (url, options = {}) => {
 
 const padNumber = number => String(number).padStart(2, '0');
 
-const adjustTimes = () => {
-  seconds++;
-
-  if (seconds === 60) {
-    minutes++;
-    seconds = 0;
-    points += 3;
-    console.log('extra points added for a minute');
-  }
-
-  if (minutes === 60) {
-    hours++;
-    minutes = 0;
-    points += 13;
-    console.log('extra points added for an hour');
-  }
-
-  timer.innerText = `${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}`;
-}
-
-// initial snake always begins in the middle of the board
-const snake = [
-  { x: 300, y: 180 },
-  { x: 290, y: 180 },
-  { x: 280, y: 180 },
-  { x: 270, y: 180 },
-  { x: 260, y: 180 },
-];
-
-// update velocities based on keypresses
-// and make sure that you can't move backwards into your self
-const setVelocities = (e) => {
-  if (!keyClicked) {
-    keyClicked = true;
-    if (!xVelocity && e.key.toLowerCase() === 'a') {
-      xVelocity = -10;
-      yVelocity = 0;
-    } else if (!xVelocity && e.key.toLowerCase() === 'd') {
-      xVelocity = 10;
-      yVelocity = 0;
-    } else if (!yVelocity && e.key.toLowerCase() === 'w') {
-      xVelocity = 0;
-      yVelocity = -10;
-    } else if (!yVelocity && e.key.toLowerCase() === 's') {
-      xVelocity = 0;
-      yVelocity = 10;
-    }
-  }
-}
-
-const handleStartOrResetButtonClick = (e) => {
-  if (e.target.innerText.toLowerCase() === 'reset') {
-    location.reload();
-  }
-
-  instructionsModal.classList.add('hidden');
-  e.target.innerText = 'Reset';
-
-  interval = setInterval(adjustTimes, 1000);
-
-  snakeBoard.focus();
-
-  viewInstructionsButton.disabled = true;
-  viewHiScoresButton.disabled = true;
-
-  runGame();
-  running = true;
-}
-
 const toggleModals = (modal) => modal.classList.toggle('hidden');
 
-const clearCanvas = () => {
-  snakeBoardContext.fillStyle = '#000';
-  snakeBoardContext.fillRect(0, 0, snakeBoard.width, snakeBoard.height);
-  snakeBoardContext.strokeRect(0, 0, snakeBoard.width, snakeBoard.height);
-}
-
-// Draw the snake on the canvas
 const drawSnake = () => {
   snake.forEach((part, i) => {
     !i ? snakeBoardContext.fillStyle = '#FF0' : snakeBoardContext.fillStyle = '#28BD00';
     snakeBoardContext.fillRect(part.x, part.y, 10, 10);
     snakeBoardContext.strokeRect(part.x, part.y, 10, 10);
   });
-}
-
-const moveSnake = () => {  
-
-  // check for collision with walls
-  if (snake[0].x + xVelocity === -10 || snake[0].x + xVelocity === 600 || snake[0].y + yVelocity === -10 || snake[0].y + yVelocity === 350) {
-    loser = true;
-    running = false;
-    clearInterval(interval);
-    return;
-  }
-
-  // where the snake will be next
-  const head = {
-    x: snake[0].x + xVelocity,
-    y: snake[0].y + yVelocity,
-  };
-
-  checkForTailCollision(head);
-
-  if (checkForPillCollision(head)) {
-    populatePill();
-  } else {
-    snake.unshift(head);
-    snake.pop();
-  }
-}
-
-const runGame = () => {
-  if (loser) {
-    gameOverModal.classList.remove('hidden');
-    finalScore.innerText = score;
-
-    if (!hiScores[9] || score > Number(hiScores[9].score)) {
-      const name = prompt(`
-        Congrats, You\'ve scored in the top 10!!
-        Please enter an identifier:
-      `);
-      insertScore(name ? name : 'anonymous');
-    } else {
-      insertScore('anonymous');
-    }
-    
-    snakeBoardContext.clearRect(0, 0, snakeBoard.width, snakeBoard.height);
-    loser = false;
-  } else {
-    setTimeout(() => {
-      keyClicked = false;
-      clearCanvas();
-      populatePill(pillXValue, pillYValue);
-      moveSnake();
-      drawSnake();
-      runGame();
-    }, timeout);
-  }
 }
 
 const populatePill = async (x = null, y = null) => {
@@ -244,17 +133,110 @@ const populatePill = async (x = null, y = null) => {
   snakeBoardContext.closePath();
 }
 
-const populateHiScores = () => {
-  for (let i = 0; i < 10; i++) {
-    const hiScore = hiScores[i] ?? {
-      name: 'EMPTY',
-      score: 0,
-      time: '00:00:00',
-      pills_eaten: 0,
-    };
-    const hiScoreRow = document.querySelector(`.table-data-${i}`);
-    hiScoreRow.innerText = `${padNumber(i + 1)}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time} - ${hiScore.pills_eaten} pills eaten`;
+const handleStartOrResetButtonClick = (e) => {
+  if (e.target.innerText.toLowerCase() === 'reset') location.reload();
+
+  instructionsModal.classList.add('hidden');
+  e.target.innerText = 'Reset';
+
+  interval = setInterval(adjustTimes, 1000);
+
+  snakeBoard.focus();
+
+  viewInstructionsButton.disabled = true;
+  viewHiScoresButton.disabled = true;
+
+  runGame();
+  running = true;
+}
+
+const adjustTimes = () => {
+  seconds++;
+
+  if (seconds === 60) {
+    minutes++;
+    seconds = 0;
+    points += 3;
+    console.log('extra points added for a minute');
   }
+
+  if (minutes === 60) {
+    hours++;
+    minutes = 0;
+    points += 13;
+    console.log('extra points added for an hour');
+  }
+
+  timer.innerText = `${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}`;
+}
+
+const runGame = () => {
+  if (loser) {
+    gameOverModal.classList.remove('hidden');
+    finalScore.innerText = score;
+
+    if (!hiScores[9] || score > Number(hiScores[9].score)) {
+      const name = prompt(`
+        Congrats, You\'ve scored in the top 10!!
+        Please enter an identifier:
+      `);
+      insertScore(name ? name : 'anonymous');
+    } else {
+      insertScore('anonymous');
+    }
+    
+    snakeBoardContext.clearRect(0, 0, snakeBoard.width, snakeBoard.height);
+  } else {
+    setTimeout(() => {
+      keyClicked = false;
+      clearCanvas();
+      populatePill(pillXValue, pillYValue);
+      moveSnake();
+      drawSnake();
+      runGame();
+    }, timeout);
+  }
+}
+
+const clearCanvas = () => {
+  snakeBoardContext.fillStyle = '#000';
+  snakeBoardContext.fillRect(0, 0, snakeBoard.width, snakeBoard.height);
+  snakeBoardContext.strokeRect(0, 0, snakeBoard.width, snakeBoard.height);
+}
+
+const moveSnake = () => {  
+
+  // check for collision with walls
+  if (snake[0].x + xVelocity === -10 || snake[0].x + xVelocity === 600 || snake[0].y + yVelocity === -10 || snake[0].y + yVelocity === 350) {
+    loser = true;
+    running = false;
+    clearInterval(interval);
+    return;
+  }
+
+  // where the snake will be next
+  const head = {
+    x: snake[0].x + xVelocity,
+    y: snake[0].y + yVelocity,
+  };
+
+  checkForTailCollision(head);
+
+  if (checkForPillCollision(head)) {
+    populatePill();
+  } else {
+    snake.unshift(head);
+    snake.pop();
+  }
+}
+
+const checkForTailCollision = (head) => {
+  snake.forEach(part => {
+    if (head.x === part.x && head.y === part.y) {
+      loser = true;
+      clearInterval(interval);
+    }
+  });
 }
 
 const checkForPillCollision = head => {
@@ -280,13 +262,25 @@ const checkForPillCollision = head => {
   }
 }
 
-const checkForTailCollision = (head) => {
-  snake.forEach(part => {
-    if (head.x === part.x && head.y === part.y) {
-      loser = true;
-      clearInterval(interval);
+// update velocities based on keypresses
+// and make sure that you can't move backwards into your self
+const setVelocities = (e) => {
+  if (!keyClicked) {
+    keyClicked = true;
+    if (!xVelocity && e.key.toLowerCase() === 'a') {
+      xVelocity = -10;
+      yVelocity = 0;
+    } else if (!xVelocity && e.key.toLowerCase() === 'd') {
+      xVelocity = 10;
+      yVelocity = 0;
+    } else if (!yVelocity && e.key.toLowerCase() === 'w') {
+      xVelocity = 0;
+      yVelocity = -10;
+    } else if (!yVelocity && e.key.toLowerCase() === 's') {
+      xVelocity = 0;
+      yVelocity = 10;
     }
-  });
+  }
 }
 
 const insertScore = (name) => {

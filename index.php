@@ -35,5 +35,9 @@
     </main>
   </body>
   <script src="/global.js"></script>
-  <?= "<script src=/views/$route/$route.js></script>"; ?>
+  <?php
+    if ($route === "snake" || $route === "sandbox") {
+      echo "<script src=/views/$route/$route.js></script>";
+    }
+  ?>
 </html>
