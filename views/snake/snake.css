@@ -58,26 +58,12 @@ body {
   font-size: 110%;
 }
 
-.game-over-modal,
-.game-instructions-modal {
-  align-items: center;
-  background-color: #000;
-  border: 1px solid #28BD00;
-  color: #28BD00;
-  display: flex;
-  flex-direction: column;
-  height: 352px;
-  justify-content: center;
-  line-height: 1.5;
-  /* horrible margin hack :| */
-  margin-top: -65px; 
-  padding: 15px;
-  position: absolute;
-  width: 600px;
-}
-
 .game-over-text {
   font-size: 300%;
+}
+
+.user-score-text {
+  margin-bottom: 40px;
 }
 
 .game-instructions-paragraph {
@@ -124,25 +110,26 @@ body {
   margin-top: 30px;
 }
 
-.hi-scores-modal {
+.modal {
   align-items: center;
   background-color: #000;
   color: #28BD00;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 90vh;
   justify-content: center;
   left: 0;
-  padding-bottom: 20px;
+  padding: 0 100px 20px 100px;
   position: absolute;
-  top: 0;
+  top: 10vh;
   width: 100vw;
+  z-index: 1;
 }
 
 .hi-scores-table {
   color: #28BD00;
-  font-size: 130%;
-  margin: 40px;
+  font-size: 100%;
+  margin-bottom: 40px;
 }
 
 .hi-scores-table-header {
@@ -160,6 +147,7 @@ body {
 
 .link-to-github-wrapper {
   color: #28BD00;
+  margin-top: 30px;
 }
 
 .link-to-github {

@@ -1,37 +1,23 @@
-<section class="snake-game-wrapper section-wrapper snake">
-  <section class="heading-and-canvas-wrapper">
-    <section class="snake-heading-and-timer-wrapper">
-      <h4 class="snake-heading subheading">
-        SNAKE: RED && BLUE PILLS
-      </h4>
-      <span class="timer">00:00:00</span>
-    </section>
-    <canvas class="snake-game-canvas" tabindex="1" width="600" height="350">
-      Your browser does not support HTML canvas.
-    </canvas>
-  </section>
-  <section class="snake-game-buttons-wrapper">
-    <button class="start-or-reset-game-button game-button">Start</button>
-    <button class="view-instructions-button game-button">Instructions</button>
-    <button class="view-hi-scores-button game-button">High Scores</button>
-  </section>
+<section class ="game-over-modal modal hidden">
+  <h2 class="game-over-text">GAME OVER!</h2>
+  <h2 class="user-score-text">
+    YOUR SCORE: <span class="final-score"></span>
+  </h2>
+  <button class="close-game-over-button game-button">Close</button>
   <span class="link-to-github-wrapper">
     View the source code on <a class="link-to-github" href="https://github.com/pJanks/johnnycassidy.dev/tree/main/views/snake">Github</a>.
   </span>
 </section>
-<section class ="game-over-modal hidden">
-  <h2 class="game-over-text game-over">GAME OVER!</h2>
-  <h2 class="user-score-text game-over">
-    YOUR SCORE: <span class="final-score"></span>
-  </h2>
-</section>
-<section class="game-instructions-modal hidden">
+<section class="game-instructions-modal modal hidden">
   <p class="game-instructions-paragraph">
     The game can be started by clicking the 'Start' button. Upon 'GAME OVER', the board can be reset by clicking the 'Reset' button, and a new game can be intialized by, again, clicking the 'Start' button. You can move left with the 'A' key, up with the 'W' key, right with the 'D' key, and down with the 'S' key. The objective is to consume as many of the pills as possible without colliding with the walls or with your own tail. Good luck!
   </p>
   <button class="close-instructions-button game-button">Close</button>
+  <span class="link-to-github-wrapper">
+    View the source code on <a class="link-to-github" href="https://github.com/pJanks/johnnycassidy.dev/tree/main/views/snake">Github</a>.
+  </span>
 </section>
-<section class="hi-scores-modal hidden">
+<section class="hi-scores-modal modal hidden">
   <table class="hi-scores-table">
     <thead>
       <tr>
@@ -72,4 +58,28 @@
     </tbody>
   </table>
   <button class="close-hi-scores-button game-button">Close</button>
+  <span class="link-to-github-wrapper">
+    View the source code on <a class="link-to-github" href="https://github.com/pJanks/johnnycassidy.dev/tree/main/views/snake">Github</a>.
+  </span>
+</section>
+<section class="snake-game-wrapper section-wrapper snake">
+  <section class="heading-and-canvas-wrapper">
+    <section class="snake-heading-and-timer-wrapper">
+      <h4 class="snake-heading subheading">
+        SNAKE: RED && BLUE PILLS
+      </h4>
+      <span class="timer">00:00:00</span>
+    </section>
+    <canvas class="snake-game-canvas" tabindex="1" width="600" height="350">
+      Your browser does not support HTML canvas.
+    </canvas>
+  </section>
+  <section class="snake-game-buttons-wrapper">
+    <button class="start-or-reset-game-button game-button">Start</button>
+    <button class="view-instructions-button game-button">Instructions</button>
+    <button class="view-hi-scores-button game-button">High Scores</button>
+  </section>
+  <span class="link-to-github-wrapper">
+    View the source code on <a class="link-to-github" href="https://github.com/pJanks/johnnycassidy.dev/tree/main/views/snake">Github</a>.
+  </span>
 </section>

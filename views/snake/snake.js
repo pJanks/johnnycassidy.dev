@@ -6,6 +6,7 @@ const viewInstructionsButton = document.querySelector('.view-instructions-button
 const startOrResetButton = document.querySelector('.start-or-reset-game-button');
 const closeHiScoresButton = document.querySelector('.close-hi-scores-button');
 const instructionsModal = document.querySelector('.game-instructions-modal');
+const closeGameOverButton = document.querySelector('.close-game-over-button');
 const viewHiScoresButton = document.querySelector('.view-hi-scores-button');
 const hiScoresModal = document.querySelector('.hi-scores-modal');
 const gameOverModal = document.querySelector('.game-over-modal');
@@ -13,11 +14,12 @@ const snakeBoard = document.querySelector('.snake-game-canvas');
 const finalScore = document.querySelector('.final-score');
 const timer = document.querySelector('.timer');
 
-startOrResetButton.addEventListener('click', (e) => handleStartOrResetButtonClick(e));
-viewInstructionsButton.addEventListener('click', () => toggleModals(instructionsModal));
 closeInstructionsButton.addEventListener('click', () => toggleModals(instructionsModal));
-viewHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal));
+viewInstructionsButton.addEventListener('click', () => toggleModals(instructionsModal));
+startOrResetButton.addEventListener('click', (e) => handleStartOrResetButtonClick(e));
 closeHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal));
+closeGameOverButton.addEventListener('click', () => toggleModals(gameOverModal));
+viewHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal));
 snakeBoard.addEventListener('keydown', (e) => setVelocities(e));
 
 // prevent a user from navigating out of gameboard
@@ -88,7 +90,12 @@ const makeNetworkRequest = async (url, options = {}) => {
 
 const padNumber = number => String(number).padStart(2, '0');
 
-const toggleModals = modal => modal.classList.toggle('hidden');
+const toggleModals = (modal) => {
+  const snakeGameWrapper = document.querySelector('.snake-game-wrapper');
+
+  snakeGameWrapper.classList.toggle('hidden');
+  modal.classList.toggle('hidden');
+}
 
 const drawSnake = () => {
   snake.forEach((part, i) => {
@@ -136,16 +143,12 @@ const populatePill = async (x = null, y = null) => {
 
 const handleStartOrResetButtonClick = (e) => {
   if (e.target.innerText.toLowerCase() === 'reset') location.reload();
-
-  instructionsModal.classList.add('hidden');
+  
   e.target.innerText = 'Reset';
 
   interval = setInterval(adjustTimes, 1000);
 
   snakeBoard.focus();
-
-  viewInstructionsButton.disabled = true;
-  viewHiScoresButton.disabled = true;
 
   runGame();
   running = true;
@@ -171,16 +174,10 @@ const adjustTimes = () => {
   timer.innerText = `${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}`;
 }
 
-
 const runGame = () => {
   if (loser) {
-    gameOverModal.classList.remove('hidden');
+    toggleModals(gameOverModal);
     finalScore.innerText = score;
-
-    viewInstructionsButton.disabled = false;
-    viewHiScoresButton.disabled = false;
-
-    snakeBoardContext.clearRect(0, 0, snakeBoard.width, snakeBoard.height);
 
     if (!hiScores[9] || score > Number(hiScores[9].score)) {
       const name = prompt(`
