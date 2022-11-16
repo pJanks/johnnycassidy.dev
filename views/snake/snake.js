@@ -171,6 +171,7 @@ const adjustTimes = () => {
   timer.innerText = `${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}`;
 }
 
+
 const runGame = () => {
   if (loser) {
     gameOverModal.classList.remove('hidden');
@@ -180,7 +181,7 @@ const runGame = () => {
     viewHiScoresButton.disabled = false;
 
     snakeBoardContext.clearRect(0, 0, snakeBoard.width, snakeBoard.height);
-    
+
     if (!hiScores[9] || score > Number(hiScores[9].score)) {
       const name = prompt(`
         Congrats, You\'ve scored in the top 10!!
