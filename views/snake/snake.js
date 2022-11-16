@@ -88,7 +88,7 @@ const makeNetworkRequest = async (url, options = {}) => {
 
 const padNumber = number => String(number).padStart(2, '0');
 
-const toggleModals = (modal) => modal.classList.toggle('hidden');
+const toggleModals = modal => modal.classList.toggle('hidden');
 
 const drawSnake = () => {
   snake.forEach((part, i) => {
@@ -176,6 +176,11 @@ const runGame = () => {
     gameOverModal.classList.remove('hidden');
     finalScore.innerText = score;
 
+    viewInstructionsButton.disabled = false;
+    viewHiScoresButton.disabled = false;
+
+    snakeBoardContext.clearRect(0, 0, snakeBoard.width, snakeBoard.height);
+    
     if (!hiScores[9] || score > Number(hiScores[9].score)) {
       const name = prompt(`
         Congrats, You\'ve scored in the top 10!!
@@ -183,10 +188,8 @@ const runGame = () => {
       `);
       insertScore(name ? name : 'anonymous');
     } else {
-      insertScore('anonymous');
+      insertScore('not_a_hi_scorer');
     }
-    
-    snakeBoardContext.clearRect(0, 0, snakeBoard.width, snakeBoard.height);
   } else {
     setTimeout(() => {
       keyClicked = false;
