@@ -78,12 +78,10 @@ const toggleModals = modal => {
   modal.classList.toggle('hidden');
 }
 
-window.onload = async () => {
-  hiScores = await makeNetworkRequest('/backend/get_scores.php');
-  populateHiScores();
-}
+window.onload = () => populateHiScores();
 
-const populateHiScores = () => {
+const populateHiScores = async () => {
+  hiScores = await makeNetworkRequest('/backend/get_scores.php');
   for (let i = 0; i < 10; i++) {
     const hiScore = hiScores[i] ?? {
       name: 'EMPTY',
@@ -185,6 +183,7 @@ const runGame = async () => {
     viewHiScoresButton.disabled = false;
 
     toggleModals(gameOverModal);
+    closeGameOverButton.focus();
     finalScore.innerText = score;
 
     if (!hiScores[9] || score > Number(hiScores[9].score)) {
@@ -193,10 +192,10 @@ const runGame = async () => {
         Please enter an identifier:
       `);
       await insertScore(name ? name : 'anonymous');
-      populateHiScores();
     } else {
-      insertScore('not_a_hi_scorer');
+      await insertScore('not_a_hi_scorer');
     }
+    populateHiScores();
   } else {
     setTimeout(() => {
       keyClicked = false;
@@ -301,7 +300,7 @@ const insertScore = async (name) => {
     body: JSON.stringify({ score, name, time, pillsEaten }),
     'content-type': 'application/json',
   };
-  makeNetworkRequest('/backend/insert_scores.php', options);
+  await makeNetworkRequest('/backend/insert_scores.php', options);
 }
 
 drawSnake();
