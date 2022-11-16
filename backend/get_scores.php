@@ -1,10 +1,10 @@
 <?php
-  require_once '../config.php';
+try {
+    require_once '../config.php';
+    
+    $date = new DateTime();
+    $date = $date->format('m.d.y h:i:s A');
 
-  $date = new DateTime();
-  $date = $date->format('m.d.y h:i:s A');
-
-  try {
     $sql = 'SELECT * FROM scores ORDER BY score DESC LIMIT 10';
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
@@ -25,5 +25,4 @@
   } catch(PDOException $e) {
     $errorMessage = $date . ' ERROR GETTING scores TABLE: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
     file_put_contents('../logs/error.log', $errorMessage, FILE_APPEND);
-    echo json_encode(['message' => $errorMessage], JSON_PRETTY_PRINT);
   }

@@ -1,10 +1,10 @@
 <?php
-  require_once 'config.php';
-  
-  $date = new DateTime();
-  $date = $date->format('m.d.y h:i:s A');
-
   try {
+    require_once 'config.php';
+    
+    $date = new DateTime();
+    $date = $date->format('m.d.y h:i:s A');
+
     if (!isset($_SESSION['hasVisited']) || empty($_SESSION['hasVisited'])) {
       $_SESSION['hasVisited'] = true;
       $sql = "UPDATE visitor_counter SET counter = counter + 1";
@@ -18,5 +18,4 @@
   } catch(PDOException $e) {
     $errorMessage = $date . ' ERROR UPDATING visitor_counter: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
     file_put_contents('logs/error.log', $errorMessage, FILE_APPEND);
-    echo json_encode(['message' => $errorMessage], JSON_PRETTY_PRINT);
   }
