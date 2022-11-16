@@ -5,9 +5,10 @@ const closeInstructionsButton = document.querySelector('.close-instructions-butt
 const viewInstructionsButton = document.querySelector('.view-instructions-button');
 const startOrResetButton = document.querySelector('.start-or-reset-game-button');
 const closeHiScoresButton = document.querySelector('.close-hi-scores-button');
-const instructionsModal = document.querySelector('.game-instructions-modal');
 const closeGameOverButton = document.querySelector('.close-game-over-button');
+const instructionsModal = document.querySelector('.game-instructions-modal');
 const viewHiScoresButton = document.querySelector('.view-hi-scores-button');
+const snakeGameWrapper = document.querySelector('.snake-game-wrapper');
 const hiScoresModal = document.querySelector('.hi-scores-modal');
 const gameOverModal = document.querySelector('.game-over-modal');
 const snakeBoard = document.querySelector('.snake-game-canvas');
@@ -64,6 +65,19 @@ const initialTableObject = {
 
 console.table(initialTableObject);
 
+const makeNetworkRequest = async (url, options = {}) => {
+  const response = await fetch(url, options);
+  const parsedResponse = await response.json();
+  return parsedResponse;
+}
+
+const padNumber = number => String(number).padStart(2, '0');
+
+const toggleModals = modal => {
+  snakeGameWrapper.classList.toggle('hidden');
+  modal.classList.toggle('hidden');
+}
+
 window.onload = async () => {
   hiScores = await makeNetworkRequest('/backend/get_scores.php');
   populateHiScores();
@@ -78,23 +92,9 @@ const populateHiScores = () => {
       pills_eaten: 0,
     };
     const hiScoreRow = document.querySelector(`.table-data-${i}`);
+    hiScoreRow.innerText = '';
     hiScoreRow.innerText = `${padNumber(i + 1)}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time} - ${hiScore.pills_eaten} pills eaten`;
   }
-}
-
-const makeNetworkRequest = async (url, options = {}) => {
-  const response = await fetch(url, options);
-  const parsedResponse = await response.json();
-  return parsedResponse;
-}
-
-const padNumber = number => String(number).padStart(2, '0');
-
-const toggleModals = modal => {
-  const snakeGameWrapper = document.querySelector('.snake-game-wrapper');
-
-  snakeGameWrapper.classList.toggle('hidden');
-  modal.classList.toggle('hidden');
 }
 
 const drawSnake = () => {
@@ -144,6 +144,9 @@ const populatePill = async (x = null, y = null) => {
 const handleStartOrResetButtonClick = (e) => {
   if (e.target.innerText.toLowerCase() !== 'reset') {
     e.target.innerText = 'Reset';
+
+    viewInstructionsButton.disabled = true;
+    viewHiScoresButton.disabled = true;
   
     interval = setInterval(adjustTimes, 1000);
   
@@ -176,8 +179,11 @@ const adjustTimes = () => {
   timer.innerText = `${padNumber(hours)}:${padNumber(minutes)}:${padNumber(seconds)}`;
 }
 
-const runGame = () => {
+const runGame = async () => {
   if (loser) {
+    viewInstructionsButton.disabled = false;
+    viewHiScoresButton.disabled = false;
+
     toggleModals(gameOverModal);
     finalScore.innerText = score;
 
@@ -186,7 +192,8 @@ const runGame = () => {
         Congrats, You\'ve scored in the top 10!!
         Please enter an identifier:
       `);
-      insertScore(name ? name : 'anonymous');
+      await insertScore(name ? name : 'anonymous');
+      populateHiScores();
     } else {
       insertScore('not_a_hi_scorer');
     }
@@ -287,7 +294,7 @@ const setVelocities = (e) => {
   }
 }
 
-const insertScore = (name) => {
+const insertScore = async (name) => {
   const time = timer.innerText;
   const options = {
     method: 'POST',
