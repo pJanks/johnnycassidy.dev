@@ -25,6 +25,7 @@ try {
       $successMessage = "$date inserted into scores\n";
       file_put_contents('../logs/log.log', $successMessage, FILE_APPEND);
     }
+    echo json_encode(['success' => true]);
   } catch(PDOException $e) {
     $errorMessage = $date . ' ERROR INSERTING INTO scores TABLE: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
     file_put_contents('../logs/error.log', $errorMessage, FILE_APPEND);

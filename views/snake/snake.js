@@ -90,7 +90,7 @@ const makeNetworkRequest = async (url, options = {}) => {
 
 const padNumber = number => String(number).padStart(2, '0');
 
-const toggleModals = (modal) => {
+const toggleModals = modal => {
   const snakeGameWrapper = document.querySelector('.snake-game-wrapper');
 
   snakeGameWrapper.classList.toggle('hidden');
@@ -142,16 +142,18 @@ const populatePill = async (x = null, y = null) => {
 }
 
 const handleStartOrResetButtonClick = (e) => {
-  if (e.target.innerText.toLowerCase() === 'reset') location.reload();
+  if (e.target.innerText.toLowerCase() !== 'reset') {
+    e.target.innerText = 'Reset';
   
-  e.target.innerText = 'Reset';
-
-  interval = setInterval(adjustTimes, 1000);
-
-  snakeBoard.focus();
-
-  runGame();
-  running = true;
+    interval = setInterval(adjustTimes, 1000);
+  
+    snakeBoard.focus();
+  
+    runGame();
+    running = true;
+  } else {
+    location.reload();
+  }
 }
 
 const adjustTimes = () => {
