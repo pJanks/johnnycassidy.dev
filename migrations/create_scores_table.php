@@ -25,5 +25,5 @@
   } catch(PDOException $e) {
     $errorMessage = $date . ' ERROR scores TABLE WASN\'T CREATED. ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
     file_put_contents('logs/error.log', $errorMessage, FILE_APPEND);
-    echo json_encode(['message' => $errorMessage], JSON_PRETTY_PRINT);
+    // echo json_encode(['message' => $errorMessage], JSON_PRETTY_PRINT);
   }
