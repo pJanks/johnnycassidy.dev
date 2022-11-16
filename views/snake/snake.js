@@ -47,6 +47,7 @@ minutes = 0,
 seconds = 0,
 xVelocity = 10,
 yVelocity = 0,
+hiScores = [],
 pillXValue,
 pillYValue,
 interval;
@@ -62,11 +63,11 @@ const initialTableObject = {
 console.table(initialTableObject);
 
 window.onload = async () => {
-  const hiScores = await makeNetworkRequest('/backend/get_scores.php');
-  populateHiScores(hiScores);
+  hiScores = await makeNetworkRequest('/backend/get_scores.php');
+  populateHiScores();
 }
 
-const populateHiScores = (hiScores) => {
+const populateHiScores = () => {
   for (let i = 0; i < 10; i++) {
     const hiScore = hiScores[i] ?? {
       name: 'EMPTY',
