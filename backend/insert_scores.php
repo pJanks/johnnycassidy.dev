@@ -22,7 +22,7 @@ try {
     $ip = $_SERVER['REMOTE_ADDR'];
 
     if ($ip !== $myIp) {
-      $successMessage = "$date inserted into scores\n";
+      $successMessage = "$date $ip inserted into scores\n";
       file_put_contents('../logs/log.log', $successMessage, FILE_APPEND);
     }
     echo json_encode(['success' => true]);
