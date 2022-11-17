@@ -26,6 +26,6 @@
       $messageToLog = "$date: $prefix log cut in half to save memory\n";
       file_put_contents($path . $prefix . '.log', $most_recent_logs . $messageToLog);
     } else {
-      echo "<br />$prefix: $count<br />";
+      echo "$prefix: $count<br />";
     }
   }
