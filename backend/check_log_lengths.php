@@ -1,6 +1,4 @@
 <?php
-
-  ini_set('display_errors', 1);
   date_default_timezone_set('America/Los_Angeles');
   
   $log_prefixes = [
@@ -10,8 +8,8 @@
   ];
 
   $date = new DateTime();
-  $date = json_encode($date->format('m.d.y h:i:s A'), JSON_PRETTY_PRINT);
-  $messageToLog = "$date: cronjob ran to check log lengths or it was forced\n";
+  $formattedDate = json_encode($date->format('m.d.y h:i:s A'), JSON_PRETTY_PRINT);
+  $messageToLog = "$formattedDate: cronjob ran to check log lengths or it was forced\n";
   file_put_contents('/var/www/johnnycassidy.dev/logs/cronjob.log', $messageToLog, FILE_APPEND);
 
   foreach ($log_prefixes as $prefix) {
@@ -23,8 +21,8 @@
     if ($count >= 5000) {
       $most_recent_split_logs = array_slice($split_logs, -2500, 2500);
       $most_recent_logs = implode("\n", $most_recent_split_logs);
-      $messageToLog = "$date: $prefix log cut in half to save memory\n";
-      file_put_contents($path . $prefix . '.log', $most_recent_logs . $messageToLog);
+      $messageToLog = "$formattedDate: $prefix log cut in half to save memory\n";
+      file_put_contents($path . 'log.log', $most_recent_logs . $messageToLog);
     } else {
       echo "$prefix: $count<br />";
     }

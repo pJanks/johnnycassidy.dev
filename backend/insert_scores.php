@@ -3,7 +3,7 @@ try {
     require_once '../config.php';
     
     $date = new DateTime();
-    $date = $date->format('m.d.y h:i:s A');
+    $formattedDate = $date->format('m.d.y h:i:s A');
 
     $scoreData = json_decode(file_get_contents('php://input'));
     $score = $scoreData->score;
@@ -22,12 +22,12 @@ try {
     $ip = $_SERVER['REMOTE_ADDR'];
 
     if ($ip !== $myIp) {
-      $successMessage = "$date $ip inserted into scores\n";
+      $successMessage = "$formattedDate $ip inserted into scores\n";
       file_put_contents('../logs/log.log', $successMessage, FILE_APPEND);
     }
     echo json_encode(['success' => true]);
   } catch(PDOException $e) {
-    $errorMessage = $date . ' ERROR INSERTING INTO scores TABLE: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
+    $errorMessage = $formattedDate . ' ERROR INSERTING INTO scores TABLE: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
     file_put_contents('../logs/error.log', $errorMessage, FILE_APPEND);
     echo '<h1 style="color: #F00; font-size: 240%; font-weight: bold;">ERR</h1>';
   }

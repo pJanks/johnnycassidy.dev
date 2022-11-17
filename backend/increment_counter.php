@@ -3,7 +3,7 @@
     require_once 'config.php';
     
     $date = new DateTime();
-    $date = $date->format('m.d.y h:i:s A');
+    $formattedDate = $date->format('m.d.y h:i:s A');
 
     if (!isset($_SESSION['hasVisited']) || empty($_SESSION['hasVisited'])) {
       $_SESSION['hasVisited'] = true;
@@ -12,11 +12,11 @@
       $stmt->execute();
 
       $ip = $_SERVER['REMOTE_ADDR'];
-      $successMessage = "$date $ip visited\n";
+      $successMessage = "$formattedDate $ip visited\n";
       file_put_contents('logs/log.log', $successMessage, FILE_APPEND);
     }
   } catch(PDOException $e) {
-    $errorMessage = $date . ' ERROR UPDATING visitor_counter: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
+    $errorMessage = $formattedDate . ' ERROR UPDATING visitor_counter: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
     file_put_contents('logs/error.log', $errorMessage, FILE_APPEND);
     echo '<h1 style="color: #F00; font-size: 240%; font-weight: bold;">ERR</h1>';
   }
