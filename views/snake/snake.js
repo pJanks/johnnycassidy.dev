@@ -8,6 +8,7 @@ const closeHiScoresButton = document.querySelector('.close-hi-scores-button');
 const closeGameOverButton = document.querySelector('.close-game-over-button');
 const instructionsModal = document.querySelector('.game-instructions-modal');
 const viewHiScoresButton = document.querySelector('.view-hi-scores-button');
+const mobileNotSupportedModal = document.querySelector('.mobile-modal');
 const snakeGameWrapper = document.querySelector('.snake-game-wrapper');
 const hiScoresModal = document.querySelector('.hi-scores-modal');
 const gameOverModal = document.querySelector('.game-over-modal');
@@ -81,6 +82,11 @@ const toggleModals = modal => {
 window.onload = () => populateHiScores();
 
 const populateHiScores = async () => {
+  if ("ontouchstart" in document.documentElement) {
+    toggleModals(mobileNotSupportedModal);
+    return;
+  }
+
   hiScores = await makeNetworkRequest('/backend/get_scores.php');
   for (let i = 0; i < 10; i++) {
     const hiScore = hiScores[i] ?? {
