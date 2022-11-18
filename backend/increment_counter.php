@@ -14,6 +14,8 @@
       $ip = $_SERVER['REMOTE_ADDR'];
       $successMessage = "$formattedDate $ip visited\n";
       file_put_contents('logs/log.log', $successMessage, FILE_APPEND);
+      unset($stmt);
+      unset($pdo);
     }
   } catch(PDOException $e) {
     $errorMessage = $formattedDate . ' ERROR UPDATING visitor_counter: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";

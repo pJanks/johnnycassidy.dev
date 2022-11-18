@@ -22,6 +22,8 @@ try {
       file_put_contents('../logs/log.log', $successMessage, FILE_APPEND);
     }
     echo json_encode($scores, JSON_PRETTY_PRINT);
+    unset($stmt);
+    unset($pdo);
   } catch(PDOException $e) {
     $errorMessage = $formattedDate . ' ERROR GETTING scores TABLE: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
     file_put_contents('../logs/error.log', $errorMessage, FILE_APPEND);
