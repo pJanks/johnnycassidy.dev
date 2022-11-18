@@ -126,6 +126,10 @@ body {
   z-index: 1;
 }
 
+.mobile-modal {
+  padding: 0 20px;
+}
+
 .hi-scores-table {
   color: #28BD00;
   margin-bottom: 40px;

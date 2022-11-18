@@ -82,22 +82,27 @@ const toggleModals = modal => {
 window.onload = () => populateHiScores();
 
 const populateHiScores = async () => {
-  if ("ontouchstart" in document.documentElement) {
-    toggleModals(mobileNotSupportedModal);
-    return;
-  }
-
-  hiScores = await makeNetworkRequest('/backend/get_scores.php');
-  for (let i = 0; i < 10; i++) {
-    const hiScore = hiScores[i] ?? {
-      name: 'EMPTY',
-      score: 0,
-      time: '00:00:00',
-      pills_eaten: 0,
-    };
-    const hiScoreRow = document.querySelector(`.table-data-${i}`);
-    hiScoreRow.innerText = '';
-    hiScoreRow.innerText = `${padNumber(i + 1)}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time} - ${hiScore.pills_eaten} pills eaten`;
+  try {
+    if ("ontouchstart" in document.documentElement) {
+      toggleModals(mobileNotSupportedModal);
+      return;
+    }
+    
+    hiScores = await makeNetworkRequest('/backend/get_scores.php');
+    for (let i = 0; i < 10; i++) {
+      const hiScore = hiScores[i] ?? {
+        name: 'EMPTY',
+        score: 0,
+        time: '00:00:00',
+        pills_eaten: 0,
+      };
+      const hiScoreRow = document.querySelector(`.table-data-${i}`);
+      hiScoreRow.innerText = '';
+      hiScoreRow.innerText = `${padNumber(i + 1)}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time} - ${hiScore.pills_eaten} pills eaten`;
+    }
+  } catch (err) {
+    console.log(`thre was an error: ${err}`);
+    viewHiScoresButton.disabled = true;
   }
 }
 
