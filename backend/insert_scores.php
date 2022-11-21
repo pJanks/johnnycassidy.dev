@@ -2,8 +2,7 @@
 try {
     require_once '../config.php';
 
-    $scoreData = json_decode(file_get_contents('php://input'), true);
-    extract($scoreData);
+    extract(json_decode(file_get_contents('php://input'), true));
 
     $sql = 'INSERT INTO scores (score, name, time, pills_eaten) VALUES (:score, :name, :time, :pills_eaten)';
     $stmt = $pdo->prepare($sql);
