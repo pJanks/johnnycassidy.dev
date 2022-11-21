@@ -25,10 +25,9 @@
       $messageToLog = "$formattedDate: $prefix.log cut in half to save memory\n";
       file_put_contents($path . 'log.log', $most_recent_logs . $messageToLog);
     }
-
-    echo "
-      <span style='font-size: 32px;'>
-        $prefix.log entries: $countWithoutTrailingNewline<br><br>
-      </span>
-    ";
+    
+    $openingSpan = '<span style="font-size: 32px;">';
+    $spanContents = "$prefix.log entries: $countWithoutTrailingNewline<br><br>";
+    $closingSpan = '</span>';
+    echo $openingSpan . $spanContents . $closingSpan;
   }
