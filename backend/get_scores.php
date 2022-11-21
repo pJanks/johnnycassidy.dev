@@ -22,7 +22,9 @@ try {
     unset($stmt);
     unset($pdo);
   } catch(Exception $e) {
-    $errorMessage = $formattedDate . ' ERROR GETTING scores TABLE: ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
-    file_put_contents('../logs/error.log', $errorMessage, FILE_APPEND);
+    $errorMessage = $e->getMessage();
+    $errorLine = $e->getLine();
+    $errorMessageToLog = "$formattedDate: ERROR GETTING scores: $errorMessage line: $errorLine\n";
+    file_put_contents('/var/www/johnnycassidy.dev/logs/error.log', $errorMessageToLog, FILE_APPEND);
     echo '<h1 style="color: #F00; font-size: 240%; font-weight: bold;">ERROR</h1>';
   }
