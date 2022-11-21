@@ -1,33 +1,33 @@
 <?php
   date_default_timezone_set('America/Los_Angeles');
+
+  $date = new DateTime();
+  $formattedDate = $date->format('m.d.y h:i:s A');
   
-  $logPrefixes = [
+  $path = '/var/www/johnnycassidy.dev/logs/';
+  $logs = [
     'error',
     'log',
     'cronjob',
   ];
 
-  $date = new DateTime();
-  $formattedDate = $date->format('m.d.y h:i:s A');
-  $path = '/var/www/johnnycassidy.dev/logs/';
+  $cronMessageToLog = "$formattedDate: cronjob ran to check log lengths or it was forced\n";
+  file_put_contents($path . 'cronjob.log', $cronMessageToLog, FILE_APPEND);
 
-  $messageToLog = "$formattedDate: cronjob ran to check log lengths or it was forced\n";
-  file_put_contents($path . 'cronjob.log', $messageToLog, FILE_APPEND);
-
-  foreach ($logPrefixes as $prefix) {
-    $logFileContents = file_get_contents($path . $prefix . '.log');
+  foreach ($logs as $log) {
+    $logFileContents = file_get_contents($path . $log . '.log');
     $splitLogs = explode("\n", $logFileContents);
     $countWithoutTrailingNewline = count($splitLogs) - 1;
 
     if ($countWithoutTrailingNewline >= 10000) {
       $mostRecentSplitLogs = array_slice($split_logs, -5000, 5000);
       $mostRecentLogs = implode("\n", $mostRecentSplitLogs);
-      $messageToLog = "$formattedDate: $prefix.log cut in half to save memory\n";
+      $messageToLog = "$formattedDate: $log.log cut in half to save memory\n";
       file_put_contents($path . 'log.log', $mostRecentLogs . $messageToLog);
     }
     
     $openingSpan = '<span style="font-size: 32px;">';
-    $spanContents = "$prefix.log entries: $countWithoutTrailingNewline<br><br>";
+    $spanContents = "$log.log entries: $countWithoutTrailingNewline<br><br>";
     $closingSpan = '</span>';
     echo $openingSpan . $spanContents . $closingSpan;
   }

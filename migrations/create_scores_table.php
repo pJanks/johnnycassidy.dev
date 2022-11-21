@@ -24,7 +24,7 @@
     echo json_encode(['message' => $successMessage], JSON_PRETTY_PRINT);
     unset($stmt);
     unset($pdo);
-  } catch(PDOException $e) {
+  } catch(Exception $e) {
     $errorMessage = $date . ' ERROR scores TABLE WASN\'T CREATED. ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
     file_put_contents('logs/error.log', $errorMessage, FILE_APPEND);
     // echo json_encode(['message' => $errorMessage], JSON_PRETTY_PRINT);
