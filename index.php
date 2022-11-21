@@ -26,7 +26,7 @@
           case "/sandbox":
           case "/404":
             require_once "views/$route/index.html";
-            break;
+          break;
           default:
             header("Location: /404");
           break;

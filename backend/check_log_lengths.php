@@ -24,10 +24,12 @@
       $messageToLog = "$formattedDate: $prefix log cut in half to save memory\n";
       file_put_contents($path . 'log.log', $most_recent_logs . $messageToLog);
     } else {
-      echo "<span style='font-size: 32px;'>
-        $prefix.log entries: $countWithoutTrailingNewline
-        <br />
-        <br />
-      </span>";
+      echo "
+        <span style='font-size: 32px;'>
+          $prefix.log entries: $countWithoutTrailingNewline
+          <br>
+          <br>
+        </span>
+      ";
     }
   }
