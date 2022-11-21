@@ -18,8 +18,8 @@
     $split_logs = explode("\n", $log_file_contents);
     $count = count($split_logs);
 
-    if ($count >= 5000) {
-      $most_recent_split_logs = array_slice($split_logs, -2500, 2500);
+    if ($count >= 10000) {
+      $most_recent_split_logs = array_slice($split_logs, -5000, 5000);
       $most_recent_logs = implode("\n", $most_recent_split_logs);
       $messageToLog = "$formattedDate: $prefix log cut in half to save memory\n";
       file_put_contents($path . 'log.log', $most_recent_logs . $messageToLog);
