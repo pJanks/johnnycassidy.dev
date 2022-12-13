@@ -1,11 +1,12 @@
 <?php
-  try {
-    date_default_timezone_set('America/Los_Angeles');
+  date_default_timezone_set('America/Los_Angeles');
+
+  $date = new DateTime();
+  $formattedDate = $date->format('m.d.y h:i:s A');
   
-    $date = new DateTime();
-    $formattedDate = $date->format('m.d.y h:i:s A');
-    
-    $path = '/var/www/johnnycassidy.dev/logs/';
+  $path = '/var/www/johnnycassidy.dev/logs/';
+  
+  try {
     $logs = [
       'error',
       'log',
@@ -36,6 +37,6 @@
     $errorMessage = $e->getMessage();
     $errorLine = $e->getLine();
     $errorMessageToLog = "$formattedDate: ERROR WITH CRONJOB: $errorMessage line: $errorLine\n";
-    file_put_contents('/var/www/johnnycassidy.dev/logs/error.log', $errorMessageToLog, FILE_APPEND);
+    file_put_contents($path . 'error.log', $errorMessageToLog, FILE_APPEND);
     echo '<h1 style="color: #F00; font-size: 240%; font-weight: bold;">ERROR</h1>';
   }
