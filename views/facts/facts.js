@@ -10,7 +10,7 @@ const getFacts = async (randomOrToday = 'random') => {
   const url = `https://uselessfacts.jsph.pl/${randomOrToday}.json?language=en`;
   const response = await fetch(url);
   const fact = await response.json();
-  factSpan.textContent = fact.text;
+  factSpan.innerHTML = `${fact.text}<span class="asterisk">*</span>`;
 }
 
 getFacts();
