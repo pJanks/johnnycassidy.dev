@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@300;600&display=swap');
 
 /***
@@ -156,7 +156,7 @@ body {
 
 /* main nav styles */
 .main-nav {
-  flex: 4;
+  flex: 6;
 }
 
 .nav-list {

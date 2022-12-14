@@ -24,6 +24,7 @@
           case "/projects":
           case "/snake":
           case "/sandbox":
+          case "/facts":
           case "/404":
             require_once "views/$route/index.html";
           break;
@@ -36,7 +37,7 @@
   </body>
   <script src="/global.js"></script>
   <?php
-    if ($route === "snake" || $route === "sandbox") {
+    if ($route === "snake" || $route === "sandbox" || $route === "facts") {
       echo "<script src=/views/$route/$route.js></script>";
     }
   ?>

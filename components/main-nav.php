@@ -5,6 +5,7 @@
         'home' => '/',
         'projects' => '/projects',
         'snake' => '/snake',
+        'facts' => '/facts',
         // 'sandbox' => '/sandbox',
       ];
 
