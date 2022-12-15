@@ -4,7 +4,10 @@ try {
 
     extract(json_decode(file_get_contents('php://input'), true));
 
-    $sql = 'INSERT INTO scores (score, name, time, pills_eaten) VALUES (:score, :name, :time, :pills_eaten)';
+    $sql = 'INSERT INTO scores
+      (score, name, time, pills_eaten)
+    VALUES (:score, :name, :time, :pills_eaten)';
+    
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':score', $score);
     $stmt->bindParam(':name', $name);
@@ -25,6 +28,6 @@ try {
     $errorMessage = $e->getMessage();
     $errorLine = $e->getLine();
     $errorMessageToLog = "$formattedDate: ERROR INSERTING INTO scores: $errorMessage line: $errorLine\n";
-    file_put_contents('logs/error.log', $errorMessageToLog, FILE_APPEND);
+    file_put_contents('/var/www/johnnycassidy.dev/logs/error.log', $errorMessageToLog, FILE_APPEND);
     echo '<h1 style="color: #F00; font-size: 240%; font-weight: bold;">ERROR</h1>';
   }

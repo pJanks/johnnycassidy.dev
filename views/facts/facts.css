@@ -31,21 +31,26 @@
 .buttons-wrapper {
   align-items: center;
   display: flex;
-  justify-content: space-around;
-  width: 70%;
+  justify-content: space-between;
+  width: 65%;
 }
 
 .get-fact-button {
   border: 2px solid #666;
   border-radius: 6px;
-  padding: 5px;
+  padding: 7px;
   text-align: center;
   width: 200px;
 }
 
-.get-fact-button:disabled {
-  background-color: #666;
-  color: #DDD;
+.get-fact-button:hover {
+  text-decoration: underline;
+}
+
+.get-fact-button:active {
+  border: transparent;
+  background-color: #000;
+  color: #DEF8FA;
 }
 
 .annotation {

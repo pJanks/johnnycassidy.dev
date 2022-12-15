@@ -1,9 +1,7 @@
 <?php
   date_default_timezone_set('America/Los_Angeles');
-
   $date = new DateTime();
   $formattedDate = $date->format('m.d.y h:i:s A');
-  
   $path = '/var/www/johnnycassidy.dev/logs/';
   
   try {

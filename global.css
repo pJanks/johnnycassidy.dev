@@ -31,7 +31,7 @@ button {
 
 a:focus,
 button:focus {
-  outline: 1px solid #00F;
+  outline: 2px solid #00F;
 }
 
 /* Remove list styles (bullets/numbers) */
@@ -136,7 +136,7 @@ body {
 }
 
 .jcdotdev-wrapper {
-  flex: 5;
+  flex: 2;
   left: 0;
   position: relative;
 }
@@ -156,7 +156,7 @@ body {
 
 /* main nav styles */
 .main-nav {
-  flex: 6;
+  flex: 3;
 }
 
 .nav-list {

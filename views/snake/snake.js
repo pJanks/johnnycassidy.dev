@@ -25,7 +25,7 @@ viewHiScoresButton.addEventListener('click', () => toggleModals(hiScoresModal));
 snakeBoard.addEventListener('keydown', (e) => setVelocities(e));
 
 // prevent a user from navigating out of gameboard
-snakeBoard.addEventListener('blur', () => running ? snakeBoard.focus() : null);
+snakeBoard.addEventListener('blur', () => !running || snakeBoard.focus());
 
 const snakeBoardContext = snakeBoard.getContext('2d');
 
@@ -83,12 +83,12 @@ window.onload = () => populateHiScores();
 
 const populateHiScores = async () => {
   try {
-    if ("ontouchstart" in document.documentElement) {
+    if ('ontouchstart' in document.documentElement) {
       toggleModals(mobileNotSupportedModal);
       return;
     }
-    
-    hiScores = await makeNetworkRequest('/backend/get_scores.php');
+
+    hiScores = await makeNetworkRequest('backend/get_scores.php');
     for (let i = 0; i < 10; i++) {
       const hiScore = hiScores[i] ?? {
         name: 'EMPTY',
@@ -97,9 +97,12 @@ const populateHiScores = async () => {
         pills_eaten: 0,
       };
       const hiScoreRow = document.querySelector(`.table-data-${i}`);
-      hiScoreRow.innerText = '';
       hiScoreRow.innerText = `${padNumber(i + 1)}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time} - ${hiScore.pills_eaten} pills eaten`;
     }
+    
+    startOrResetButton.disabled = false;
+    viewInstructionsButton.disabled = false;
+    viewHiScoresButton.disabled = false;
   } catch (err) {
     console.log(`thre was an error: ${err}`);
     viewHiScoresButton.disabled = true;
@@ -202,7 +205,7 @@ const runGame = async () => {
         Congrats, You\'ve scored in the top 10!!
         Please enter an identifier:
       `);
-      await insertScore(name ? name : 'anonymous');
+      await insertScore(name || 'anonymous');
     } else {
       await insertScore('not_a_hi_scorer');
     }
@@ -225,23 +228,21 @@ const clearCanvas = () => {
   snakeBoardContext.strokeRect(0, 0, snakeBoard.width, snakeBoard.height);
 }
 
-const moveSnake = () => {  
-
-  // check for collision with walls
-  if (snake[0].x + xVelocity === -10 || snake[0].x + xVelocity === 600 || snake[0].y + yVelocity === -10 || snake[0].y + yVelocity === 350) {
-    loser = true;
-    running = false;
-    clearInterval(interval);
-    return;
-  }
-
+const moveSnake = () => { 
+  
   // where the snake will be next
   const head = {
     x: snake[0].x + xVelocity,
     y: snake[0].y + yVelocity,
   };
 
-  checkForTailCollision(head);
+  // check for collision with walls
+  if (head.x === -10 || head.x === 600 || head.y === -10 || head.y === 350 || checkForTailCollision(head)) {
+    loser = true;
+    running = false;
+    clearInterval(interval);
+    return;
+  }
 
   if (checkForPillCollision(head)) {
     populatePill();
@@ -252,12 +253,13 @@ const moveSnake = () => {
 }
 
 const checkForTailCollision = (head) => {
+  let collidedWithTail = false;
   snake.forEach(part => {
     if (head.x === part.x && head.y === part.y) {
-      loser = true;
-      clearInterval(interval);
+      collidedWithTail = true;
     }
   });
+  return collidedWithTail;
 }
 
 const checkForPillCollision = head => {
@@ -309,9 +311,11 @@ const insertScore = async (name) => {
   const options = {
     method: 'POST',
     body: JSON.stringify({ score, name, time, pillsEaten }),
-    'content-type': 'application/json',
+    headers: {
+      'content-type': 'application/json',
+    },
   };
-  await makeNetworkRequest('/backend/insert_scores.php', options);
+  await makeNetworkRequest('backend/insert_scores.php', options);
 }
 
 drawSnake();

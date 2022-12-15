@@ -24,5 +24,5 @@
     unset($pdo);
   } catch(Exception $e) {
     $errorMessage = $date . ' ERROR scores TABLE WASN\'T CREATED. ' . $e->getMessage() . ' line: ' . $e->getLine() . "\n";
-    file_put_contents('logs/error.log', $errorMessage, FILE_APPEND);
+    file_put_contents('/var/www/johnnycassidy.dev/logs/error.log', $errorMessage, FILE_APPEND);
   }

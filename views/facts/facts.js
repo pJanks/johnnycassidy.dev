@@ -14,7 +14,7 @@ const getFacts = async (randomOrToday = 'random') => {
       const fact = await response.json();
       factSpan.innerHTML = `${fact.text.trim()}<span class="asterisk">*</span>`;
     } else if (response.status === 429) {
-      alert('There is a limit of 30 requests per minute. Please wait 60 seconds and then try again.');
+      alert('Limit of 30 requests per minute. Please wait a bit and try again.');
     }
   } catch(err) {
     alert(`There was an error: ${err}`);

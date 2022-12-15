@@ -1,3 +1,11 @@
+/*
+  some of the global.css styles need
+  to be overwritten because the snake
+  project was created in a different
+  scope prior to building this project
+*/
+
+
 * {
   overscroll-behavior: none;
 }
