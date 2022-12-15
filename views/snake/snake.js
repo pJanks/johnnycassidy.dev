@@ -242,9 +242,7 @@ const moveSnake = () => {
     running = false;
     clearInterval(interval);
     return;
-  }
-
-  if (checkForPillCollision(head)) {
+  } else if (checkForPillCollision(head)) {
     populatePill();
   } else {
     snake.unshift(head);

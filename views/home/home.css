@@ -11,7 +11,7 @@
 }
 
 .main-greeting-heading {
-  animation: 1.5s linear fadeIn;
+  animation: .8s linear fadeIn;
   font-size: 400%;
   font-weight: 100;
   letter-spacing: 20px;
@@ -21,7 +21,7 @@
 }
 
 .self-description {
-  animation: 1.5s linear fadeIn;
+  animation: .8s linear fadeIn;
   font-size: 105%;
   letter-spacing: 1px;
   line-height: 150%;
@@ -37,7 +37,7 @@
 }
 
 .social-media-icon {
-  animation: 1.5s linear fadeIn;
+  animation: .8s linear fadeIn;
   margin: 0 10px;
   width: 40px;
 }
@@ -46,7 +46,6 @@
   opacity: .5;
 }
 
-/* animations */
 @keyframes fadeIn {
   0% {
     opacity: .1;

@@ -132,7 +132,7 @@ body {
 }
 
 .slide-in {
-  animation: slideIn 1s forwards;
+  animation: slideIn .8s forwards;
 }
 
 .jcdotdev-wrapper {
@@ -172,7 +172,6 @@ body {
   text-decoration: underline;
 }
 
-/* animation keyframes */
 @keyframes slideIn {
   0% {
     transform: translateX(-200px);
