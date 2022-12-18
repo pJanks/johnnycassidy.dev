@@ -3,6 +3,7 @@
   require_once 'backend/increment_counter.php';
   $request_uri = strtolower(rtrim($_SERVER['REQUEST_URI'], '/'));
   $route = explode('/', $request_uri)[1] ?? 'home';
+  if ($route === 'sandbox') return require_once "views/$route/index.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +24,6 @@
           case '/home':
           case '/projects':
           case '/snake':
-          case '/sandbox':
           case '/facts':
           case '/404':
             require_once "views/$route/index.html";
@@ -37,7 +37,7 @@
   </body>
   <script src="global.js"></script>
   <?php
-    if ($route === 'snake' || $route === 'sandbox' || $route === 'facts') {
+    if ($route === 'snake' || $route === 'facts') {
       echo "<script src=views/$route/$route.js></script>";
     }
   ?>

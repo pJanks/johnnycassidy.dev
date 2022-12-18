@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@300;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100;300;600;900&display=swap');
 
 /***
     The new CSS reset - version 1.7.2 (last updated 23.6.2022)
@@ -92,92 +92,4 @@ meter {
 /* apply back the draggable feature - exist only in Chromium and Safari */
 :where([draggable="true"]) {
   -webkit-user-drag: element;
-}
-
-/* global styles */
-body {
-  background-color: #DEF8FA;
-  font-family: 'Montserrat', sans-serif;
-  width: 100vw;
-}
-
-.app-wrapper {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  min-height: 90vh;
-  padding-top: 10vh;
-  width: 100%;
-}
-
-.description-link {
-  border-bottom: 1px solid #000;
-  font-weight: 600;
-}
-
-.description-link:hover {
-  color: #666;
-}
-
-/* main header styles */
-.main-header {
-  align-items: center;
-  background-color: inherit;
-  border-bottom: 1px solid #666;
-  display: flex;
-  height: 10vh;
-  justify-content: space-between;
-  padding: 0 30px;
-  position: fixed;
-  width: 100%;
-}
-
-.slide-in {
-  animation: slideIn .8s forwards;
-}
-
-.jcdotdev-wrapper {
-  flex: 2;
-  left: 0;
-  position: relative;
-}
-
-.jcdotdev {
-  align-items: baseline;
-  display: flex;
-  font-size: 180%;
-  font-weight: 700;
-  width: fit-content;
-}
-
-.jcdotdev-small {
-  font-size: 50%;
-  font-weight: 500;
-}
-
-/* main nav styles */
-.main-nav {
-  flex: 3;
-}
-
-.nav-list {
-  align-items: center;
-  display: flex;
-  font-size: 130%;
-  justify-content: space-between;
-  text-transform: uppercase;
-  width: 100%;
-}
-
-.nav-list-item-link:hover {
-  text-decoration: underline;
-}
-
-@keyframes slideIn {
-  0% {
-    transform: translateX(-200px);
-  }
-  100% {
-    transform: translateX(0);
-  }
 }
