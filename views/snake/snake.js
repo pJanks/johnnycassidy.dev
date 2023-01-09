@@ -287,7 +287,6 @@ const checkForPillCollision = head => {
 // and make sure that you can't move backwards into your self
 const setVelocities = (e) => {
   if (!keyClicked) {
-    console.log(e.key);
     keyClicked = true;
     if (!xVelocity && e.key.toLowerCase() === 'a' || e.key.toLowerCase() === 'arrowleft') {
       xVelocity = -10;
