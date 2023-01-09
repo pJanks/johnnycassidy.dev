@@ -287,17 +287,18 @@ const checkForPillCollision = head => {
 // and make sure that you can't move backwards into your self
 const setVelocities = (e) => {
   if (!keyClicked) {
+    console.log(e.key);
     keyClicked = true;
-    if (!xVelocity && e.key.toLowerCase() === 'a') {
+    if (!xVelocity && e.key.toLowerCase() === 'a' || e.key.toLowerCase() === 'arrowleft') {
       xVelocity = -10;
       yVelocity = 0;
-    } else if (!xVelocity && e.key.toLowerCase() === 'd') {
+    } else if (!xVelocity && e.key.toLowerCase() === 'd' || e.key.toLowerCase() === 'arrowright') {
       xVelocity = 10;
       yVelocity = 0;
-    } else if (!yVelocity && e.key.toLowerCase() === 'w') {
+    } else if (!yVelocity && e.key.toLowerCase() === 'w' || e.key.toLowerCase() === 'arrowup') {
       xVelocity = 0;
       yVelocity = -10;
-    } else if (!yVelocity && e.key.toLowerCase() === 's') {
+    } else if (!yVelocity && e.key.toLowerCase() === 's' || e.key.toLowerCase() === 'arrowdown') {
       xVelocity = 0;
       yVelocity = 10;
     }
