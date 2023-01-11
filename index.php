@@ -1,5 +1,4 @@
 <?php
-
   session_start();
   require_once 'backend/increment_counter.php';
   $request_uri = strtolower(rtrim($_SERVER['REQUEST_URI'], '/'));

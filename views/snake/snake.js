@@ -288,16 +288,16 @@ const checkForPillCollision = head => {
 const setVelocities = (e) => {
   if (!keyClicked) {
     keyClicked = true;
-    if (!xVelocity && e.key.toLowerCase() === 'a' || e.key.toLowerCase() === 'arrowleft') {
+    if (!xVelocity && (e.key.toLowerCase() === 'a' || e.key.toLowerCase() === 'arrowleft')) {
       xVelocity = -10;
       yVelocity = 0;
-    } else if (!xVelocity && e.key.toLowerCase() === 'd' || e.key.toLowerCase() === 'arrowright') {
+    } else if (!xVelocity && (e.key.toLowerCase() === 'd' || e.key.toLowerCase() === 'arrowright')) {
       xVelocity = 10;
       yVelocity = 0;
-    } else if (!yVelocity && e.key.toLowerCase() === 'w' || e.key.toLowerCase() === 'arrowup') {
+    } else if (!yVelocity && (e.key.toLowerCase() === 'w' || e.key.toLowerCase() === 'arrowup')) {
       xVelocity = 0;
       yVelocity = -10;
-    } else if (!yVelocity && e.key.toLowerCase() === 's' || e.key.toLowerCase() === 'arrowdown') {
+    } else if (!yVelocity && (e.key.toLowerCase() === 's' || e.key.toLowerCase() === 'arrowdown')) {
       xVelocity = 0;
       yVelocity = 10;
     }
