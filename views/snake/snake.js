@@ -84,11 +84,9 @@ window.onload = () => populateHiScores();
 
 const populateHiScores = async () => {
   try {
-    if ('ontouchstart' in document.documentElement) {
-      toggleModals(mobileNotSupportedModal);
-      return;
-    }
+    if ('ontouchstart' in document.documentElement) return toggleModals(mobileNotSupportedModal);
 
+    viewInstructionsButton.disabled = false;
     hiScores = await makeNetworkRequest('backend/get_scores.php');
     for (let i = 0; i < 10; i++) {
       const hiScore = hiScores[i] ?? {
@@ -100,13 +98,9 @@ const populateHiScores = async () => {
       const hiScoreRow = document.querySelector(`.table-data-${i}`);
       hiScoreRow.innerText = `${padNumber(i + 1)}. ${hiScore.name} - ${hiScore.score} - ${hiScore.time} - ${hiScore.pills_eaten} pills eaten`;
     }
-    
-    startOrResetButton.disabled = false;
-    viewInstructionsButton.disabled = false;
     viewHiScoresButton.disabled = false;
   } catch (err) {
-    console.log(`thre was an error: ${err}`);
-    viewHiScoresButton.disabled = true;
+    console.log(`there was an error: ${err}`);
   }
 }
 
@@ -194,14 +188,12 @@ const adjustTimes = () => {
 
 const runGame = async () => {
   if (loser) {
-    viewInstructionsButton.disabled = false;
-    viewHiScoresButton.disabled = false;
 
     toggleModals(gameOverModal);
     closeGameOverButton.focus();
     finalScore.innerText = score;
 
-    if (!hiScores[9] || score > Number(hiScores[9].score)) {
+    if (hiScores.length && !hiScores[9] || score > Number(hiScores[9]?.score)) {
       const name = prompt(`
         Congrats, You\'ve scored in the top 10!!
         Please enter an identifier:

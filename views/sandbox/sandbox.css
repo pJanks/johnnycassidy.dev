@@ -1,56 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100;300;600;900&display=swap');
 
 body {
-  align-items: center;
+  /* align-items: center;
   display: flex;
   flex-direction: column;
+  justify-content: space-between; */
   font-family: 'Noto Sans Mono', monospace;
-  justify-content: space-between;
   min-height: 100vh;
   width: 100vw;
-}
-
-main {
-  align-items: center;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  justify-content: center;
-  width: 100vw;
-}
-
-h1 {
-  font-weight: 600;
-  margin: 20px;
-}
-
-form {
-  align-items: center;
-  border: 2px solid #000;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: 20px;
-  padding: 40px;
-  width: 400px;
-}
-
-input,
-button {
-  border: 1px solid #000;
-  margin: 20px;
-  padding: 6px;
-}
-
-input[type="radio"],
-label,
-button {
-  cursor: pointer;
-}
-
-span {
-  margin: 10px;
-  width: 400px;
 }

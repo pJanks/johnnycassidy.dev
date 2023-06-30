@@ -1,15 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100;300;600;900&display=swap');
-
-/***
-    The new CSS reset - version 1.7.2 (last updated 23.6.2022)
-    GitHub page: https://github.com/elad2412/the-new-css-reset
-***/
+/* 
+  The new CSS reset - version 1.8.4 (last updated 14.2.2023)
+  GitHub page: https://github.com/elad2412/the-new-css-reset
+*/
 
 /*
-    Remove all the styles of the "User-Agent-Stylesheet", except for the 'display' property
-    - The "symbol *" part is to solve Firefox SVG sprite bug
+  Remove all the styles of the "User-Agent-Stylesheet", except for the 'display' property
+  - The "symbol *" part is to solve Firefox SVG sprite bug
  */
- *:where(:not(html, iframe, canvas, img, svg, video, input):not(svg *, symbol *)) {
+ *:where(:not(html, iframe, canvas, img, svg, video, audio):not(svg *, symbol *)) {
   all: unset;
   display: revert;
 }
@@ -22,27 +20,19 @@
 }
 
 /* Reapply the pointer cursor for anchor tags */
-a,
-button {
-  cursor: pointer;
-  outline: 1px solid transparent;
-}
-
-a:focus,
-button:focus {
-  outline: 2px solid #00F;
+a, button {
+  cursor: revert;
 }
 
 /* Remove list styles (bullets/numbers) */
-ol,
-ul,
-menu {
+ol, ul, menu {
   list-style: none;
 }
 
 /* For images to not be able to exceed their container */
 img {
-  max-width: 100%;
+  max-inline-size: 100%;
+  max-block-size: 100%;
 }
 
 /* removes spacing between cells in tables */
@@ -51,9 +41,9 @@ table {
 }
 
 /* Safari - solving issue when using user-select:none on the <body> text input doesn't working */
-/* input, textarea {
+input, textarea {
   -webkit-user-select: auto;
-} */
+}
 
 /* revert the 'white-space' property for textarea elements on Safari */
 textarea {
@@ -66,9 +56,19 @@ meter {
   appearance: revert;
 }
 
+/* preformatted text - use only for this feature */
+:where(pre) {
+  all: revert;
+}
+
 /* reset default text opacity of input placeholder */
 ::placeholder {
   color: unset;
+}
+
+/* remove default dot (•) sign */
+::marker {
+  content: initial;
 }
 
 /* fix the feature of 'hidden' attribute.
@@ -84,11 +84,16 @@ meter {
   -moz-user-modify: read-write;
   -webkit-user-modify: read-write;
   overflow-wrap: break-word;
-  /* -webkit-line-break: after-white-space;
-  -webkit-user-select: auto; */
+  -webkit-line-break: after-white-space;
+  -webkit-user-select: auto;
 }
 
 /* apply back the draggable feature - exist only in Chromium and Safari */
 :where([draggable="true"]) {
   -webkit-user-drag: element;
+}
+
+/* Revert Modal native behavior */
+:where(dialog:modal) {
+  all: revert;
 }
