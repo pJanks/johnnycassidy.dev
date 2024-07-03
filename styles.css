@@ -29,6 +29,8 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 /* custom styles */
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@900&display=swap');
+
 body {
   align-items: flex-start;
   display: flex;
@@ -46,6 +48,15 @@ body {
   filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#ebf4f5", endColorstr="#b5c6e0", GradientType=1 );
 }
 
+a {
+  color: #000;
+  font-family: "Reddit Mono", monospace;
+}
+
+a:hover {
+  font-weight: 900;
+}
+
 .content-wrapper {
   align-items: center;
   display: flex;
@@ -58,19 +69,19 @@ body {
 
 .headshot-image {
   border-radius: 50%;
-  margin: 20px 0;
+  margin-bottom: 50px;
   width: 180px;
 }
 
-.job-title {
-  margin-bottom: 10px;
+.contact {
+  margin: 25px;
 }
 
 .icon-links-wrapper {
   align-items: center;
   display: flex;
   justify-content: space-around;
-  margin-top: 40px;
+  margin: 40px;
   width: 90%;
 }
 
@@ -79,7 +90,7 @@ body {
   border-radius: 50%;
   display: flex;
   justify-content: center;
-  width: 60px;
+  width: 50px;
 }
 
 .icon-image {
