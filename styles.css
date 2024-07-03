@@ -1,0 +1,92 @@
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* custom styles */
+body {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: center;
+  font-family: "Roboto", sans-serif;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+
+  /* generated at https://cooloers.co */
+  background: hsla(186, 33%, 94%, 1);
+  background: radial-gradient(circle, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+  background: -moz-radial-gradient(circle, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+  background: -webkit-radial-gradient(circle, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#ebf4f5", endColorstr="#b5c6e0", GradientType=1 );
+}
+
+.content-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-top: 60px;
+  padding: 40px 0;
+  width: 300px;
+}
+
+.headshot-image {
+  border-radius: 50%;
+  margin: 20px 0;
+  width: 180px;
+}
+
+.job-title {
+  margin-bottom: 10px;
+}
+
+.icon-links-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40px;
+  width: 90%;
+}
+
+.icon-link {
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  width: 60px;
+}
+
+.icon-image {
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.icon-image:hover {
+  transform: scale(1.2);
+}
